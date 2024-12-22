@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: detection-be
+
+
+server:
+  port: 8081
