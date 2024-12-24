@@ -1,10 +1,9 @@
 package com.roomify.detection_be.thread;
 
 import com.roomify.detection_be.web.entity.Position;
-import org.springframework.stereotype.Component;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import org.springframework.stereotype.Component;
 
 @Component
 public class PositionUpdateQueue {
