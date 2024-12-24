@@ -28,4 +28,6 @@ jobs:
           cd /home/admin/Documents/roomify/roomify-media-be
           git stash
           git pull origin deploy/develop
+          cd /home/admin/Documents/roomify && sudo docker compose up --build
+          "${{ secrets.SSH_PASS }}"
         EOF
