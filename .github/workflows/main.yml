@@ -18,8 +18,9 @@ jobs:
       with:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-    - name: Install sshpass
-      run: sudo apt-get update && sudo apt-get install -y sshpass
+    - name: Add remote server to known_hosts
+      run: |
+        ssh-keyscan user@remote_server >> ~/.ssh/known_hosts    # Replace user@remote_server
     
     - name: Connect, Pull, and Build
       run: |
@@ -28,4 +29,5 @@ jobs:
           cd /home/admin/Documents/roomify/roomify-media-be
           git stash
           git pull origin deploy/develop
+          cd /home/admin/Documents/roomify && docker compose up --build
         EOF
