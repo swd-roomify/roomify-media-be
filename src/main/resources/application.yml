@@ -2,17 +2,11 @@ spring:
   application:
     name: detection-be
 
-
 server:
-  port: 8081
+  port: ${SERVER_PORT:8081}
 
 springdoc:
   api-docs:
     enabled: true
   swagger-ui:
     enabled: true
-  openapi:
-    description: |
-      WebSocket endpoints are available for real-time communication. Connect to the WebSocket URL below:
-      WebSocket URL: `ws://roomify.com/socket/`
-      Message format: JSON messages

@@ -3,9 +3,6 @@ package com.roomify.detection_be.web.controller;
 import com.roomify.detection_be.thread.PositionUpdateQueue;
 import com.roomify.detection_be.web.entity.Position;
 import com.roomify.detection_be.web.entity.User;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.context.event.EventListener;
@@ -30,12 +27,7 @@ public class WebSocketController {
     this.positionUpdateQueue = positionUpdateQueue;
   }
 
-  @ApiResponses(
-      value = {
-        @ApiResponse(responseCode = "200", description = "Moving"),
-        @ApiResponse(responseCode = "200", description = "Internal server error")
-      })
-  @MessageMapping("/move")
+  @MessageMapping(Path.PATH)
   public void move(User message) {
     positionUpdateQueue.addUpdate(
         message.getUsername(), new Position(message.getPositionX(), message.getPositionY()));
@@ -49,16 +41,7 @@ public class WebSocketController {
             .build());
   }
 
-  @ApiResponses(
-      value = {
-        @ApiResponse(responseCode = "200", description = "Successfully connected to WebSocket"),
-        @ApiResponse(responseCode = "200", description = "Internal server error")
-      })
-  @Operation(
-      summary = "Establish WebSocket connection",
-      description =
-          "This endpoint is used to establish a WebSocket connection. It does not perform an HTTP request but initiates a WebSocket connection.")
-  @MessageMapping("/join")
+  @MessageMapping(Path.JOIN)
   public void join(User message, SimpMessageHeaderAccessor headerAccessor) {
     String username = message.getUsername();
 
@@ -68,7 +51,7 @@ public class WebSocketController {
     String sessionId = headerAccessor.getSessionId();
     sessionToUsername.put(sessionId, username);
 
-    messagingTemplate.convertAndSend("/topic/positions", users);
+    messagingTemplate.convertAndSend(Path.POSITION, users);
   }
 
   @EventListener
@@ -80,7 +63,7 @@ public class WebSocketController {
     if (username != null) {
       users.remove(username);
 
-      messagingTemplate.convertAndSend("/topic/positions", users);
+      messagingTemplate.convertAndSend(Path.POSITION, users);
     }
   }
 }
