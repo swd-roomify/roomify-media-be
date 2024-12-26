@@ -10,3 +10,9 @@ springdoc:
     enabled: true
   swagger-ui:
     enabled: true
+
+logging:
+  level:
+    org.springframework.web.socket=DEBUG:
+    org.springframework.web=DEBUG:
+
