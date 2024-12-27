@@ -11,13 +11,18 @@ import org.springframework.web.socket.server.support.HttpSessionHandshakeInterce
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+  private final HttpSessionHandshakeInterceptor corsInterceptor;
+
+  public WebSocketConfig(HttpSessionHandshakeInterceptor corsInterceptor) {
+    this.corsInterceptor = corsInterceptor;
+  }
 
   @Override
   public void registerStompEndpoints(StompEndpointRegistry registry) {
     registry
         .addEndpoint(Path.WEBSOCKET_ENDPOINT)
-        .setAllowedOriginPatterns("pog.threemusketeer.click:5173", "localhost:5173")
-        .addInterceptors(new HttpSessionHandshakeInterceptor())
+        .setAllowedOriginPatterns("http://pog.threemusketeer.click:5173", "http://localhost:5173")
+        .addInterceptors(corsInterceptor)
         .withSockJS();
   }
 
@@ -26,4 +31,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     registry.setApplicationDestinationPrefixes(Path.APP);
     registry.enableSimpleBroker(Path.TOPIC);
   }
+
+
 }
