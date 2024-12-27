@@ -16,7 +16,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
   public void registerStompEndpoints(StompEndpointRegistry registry) {
     registry
         .addEndpoint(Path.WEBSOCKET_ENDPOINT)
-        .setAllowedOriginPatterns("*")
+        .setAllowedOriginPatterns("http://pog.threemusketeer.click:5173", "http://localhost:5173")
         .addInterceptors(new HttpSessionHandshakeInterceptor())
         .withSockJS();
   }
