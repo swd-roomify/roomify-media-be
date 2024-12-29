@@ -29,7 +29,7 @@ public class HttpSessionConfig {
 
         List<String> origins = request.getHeaders().get("Origin");
         if (origins != null && !origins.isEmpty()) {
-          String origin = origins.get(0);
+          String origin = origins.getFirst();
           response.getHeaders().add("Access-Control-Allow-Origin", origin);
           log.info(
               "Access control allow origin {}",
