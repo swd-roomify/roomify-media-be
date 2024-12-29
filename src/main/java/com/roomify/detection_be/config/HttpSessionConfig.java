@@ -31,11 +31,15 @@ public class HttpSessionConfig {
         if (origins != null && !origins.isEmpty()) {
           String origin = origins.get(0);
           response.getHeaders().add("Access-Control-Allow-Origin", origin);
-          log.info("Access control allow origin {}", response.getHeaders().getAccessControlAllowOrigin());
+          log.info(
+              "Access control allow origin {}",
+              response.getHeaders().getAccessControlAllowOrigin());
         }
 
         response.getHeaders().add("Access-Control-Allow-Credentials", "true");
-        log.info("Access control allow credentials {}", response.getHeaders().getAccessControlAllowCredentials());
+        log.info(
+            "Access control allow credentials {}",
+            response.getHeaders().getAccessControlAllowCredentials());
         return super.beforeHandshake(request, response, wsHandler, attributes);
       }
     };
