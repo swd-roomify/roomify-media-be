@@ -1,8 +1,6 @@
 package com.roomify.detection_be.config;
 
 import com.roomify.detection_be.web.controller.Path;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
@@ -13,7 +11,6 @@ import org.springframework.web.socket.server.support.HttpSessionHandshakeInterce
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
-  private static final Logger log = LoggerFactory.getLogger(WebSocketConfig.class);
   private final HttpSessionHandshakeInterceptor corsInterceptor;
 
   public WebSocketConfig(HttpSessionHandshakeInterceptor corsInterceptor) {
@@ -24,7 +21,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
   public void registerStompEndpoints(StompEndpointRegistry registry) {
     registry
         .addEndpoint(Path.WEBSOCKET_ENDPOINT)
-        .setAllowedOriginPatterns("http://pog.threemusketeer.click:5173", "http://localhost:5173")
+        .setAllowedOriginPatterns("*")
         .addInterceptors(corsInterceptor)
         .withSockJS();
   }
