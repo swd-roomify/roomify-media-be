@@ -25,7 +25,7 @@ jobs:
       run: |
         sshpass -p "${{ secrets.SSH_PASS }}" ssh -o StrictHostKeyChecking=no admin@pog.threemusketeer.click << EOF
           set -e
-          cd /home/admin/Documents/roomify/roomify-fe
+          cd /home/admin/Documents/roomify/roomify-media-be
           git pull origin deploy/develop
           cd /home/admin/Documents/roomify
           echo "${{ secrets.SSH_PASS }}" | sudo -S docker compose up --force-recreate --build -d
