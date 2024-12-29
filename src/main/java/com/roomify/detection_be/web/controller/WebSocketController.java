@@ -44,6 +44,8 @@ public class WebSocketController {
             .positionX(message.getPositionX())
             .positionY(message.getPositionY())
             .build());
+
+    log.info("User {} move {}:{}", message.getUsername(), message.getPositionX(), message.getPositionY());
   }
 
   @MessageMapping(Path.JOIN)
@@ -71,5 +73,6 @@ public class WebSocketController {
 
       messagingTemplate.convertAndSend(Path.TOPIC_POSITION, users);
     }
+    log.info("User {} disconnected", username);
   }
 }
