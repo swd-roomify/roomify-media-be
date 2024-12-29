@@ -26,10 +26,17 @@ public class HttpSessionConfig {
           @NonNull Map<String, Object> attributes)
           throws Exception {
 
-        response
-            .getHeaders()
-            .add("Access-Control-Allow-Origin", "http://pog.threemusketeer.click:5173");
-        response.getHeaders().add("Access-Control-Allow-Credentials", "true");
+        String origin = request.getHeaders().getOrigin();
+        log.info("Request Origin: {}", origin);
+
+        if ("http://pog.threemusketeer.click:5173".equals(origin) ||
+                "http://localhost:5173".equals(origin)) {
+          response.getHeaders().add("Access-Control-Allow-Origin", origin);
+          response.getHeaders().add("Access-Control-Allow-Credentials", "true");
+          log.info("Set Access-Control-Allow-Origin: {}", origin);
+        } else {
+          log.warn("Origin not allowed: {}", origin);
+        }
 
         return super.beforeHandshake(request, response, wsHandler, attributes);
       }
