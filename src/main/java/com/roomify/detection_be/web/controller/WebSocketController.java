@@ -1,7 +1,5 @@
 package com.roomify.detection_be.web.controller;
 
-import com.roomify.detection_be.thread.PositionUpdateQueue;
-import com.roomify.detection_be.web.entity.Position;
 import com.roomify.detection_be.web.entity.User;
 import com.roomify.detection_be.web.entity.payload.UserMove;
 import jakarta.validation.Valid;
@@ -24,19 +22,14 @@ public class WebSocketController {
   private final Map<String, User> users = new ConcurrentHashMap<>();
   private final Map<String, String> sessionToUsername = new ConcurrentHashMap<>();
   private final SimpMessagingTemplate messagingTemplate;
-  private final PositionUpdateQueue positionUpdateQueue;
 
   public WebSocketController(
-      SimpMessagingTemplate messagingTemplate, PositionUpdateQueue positionUpdateQueue) {
+      SimpMessagingTemplate messagingTemplate) {
     this.messagingTemplate = messagingTemplate;
-    this.positionUpdateQueue = positionUpdateQueue;
   }
 
   @MessageMapping(Path.PATH)
   public void move(@Valid @Payload UserMove message) {
-    positionUpdateQueue.addUpdate(
-        message.getUsername(), new Position(message.getPositionX(), message.getPositionY()));
-
     users.put(
         message.getUsername(),
         User.builder()
@@ -44,6 +37,8 @@ public class WebSocketController {
             .positionX(message.getPositionX())
             .positionY(message.getPositionY())
             .build());
+
+    messagingTemplate.convertAndSend(Path.TOPIC_POSITION, users);
   }
 
   @MessageMapping(Path.JOIN)
@@ -57,7 +52,7 @@ public class WebSocketController {
     sessionToUsername.put(sessionId, username);
 
     messagingTemplate.convertAndSend(Path.TOPIC_POSITION, users);
-    log.info("User {} joined", username);
+    log.info("User {} joined {}", username, sessionId);
   }
 
   @EventListener
