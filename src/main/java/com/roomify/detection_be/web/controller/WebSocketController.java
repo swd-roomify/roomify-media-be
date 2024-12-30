@@ -23,20 +23,21 @@ public class WebSocketController {
   private final Map<String, String> sessionToUsername = new ConcurrentHashMap<>();
   private final SimpMessagingTemplate messagingTemplate;
 
-  public WebSocketController(
-      SimpMessagingTemplate messagingTemplate) {
+  public WebSocketController(SimpMessagingTemplate messagingTemplate) {
     this.messagingTemplate = messagingTemplate;
   }
 
   @MessageMapping(Path.PATH)
-  public void move(@Valid @Payload UserMove message) {
-    users.put(
-        message.getUsername(),
-        User.builder()
-            .username(message.getUsername())
-            .positionX(message.getPositionX())
-            .positionY(message.getPositionY())
-            .build());
+  public void move(@Valid @Payload UserMove message, SimpMessageHeaderAccessor headerAccessor) {
+    String sessionId = headerAccessor.getSessionId();
+
+    users.computeIfPresent(
+        sessionId,
+        (key, value) -> {
+          value.setPositionX(message.getPositionX());
+          value.setPositionY(message.getPositionY());
+          return value;
+        });
 
     messagingTemplate.convertAndSend(Path.TOPIC_POSITION, users);
   }
@@ -44,11 +45,11 @@ public class WebSocketController {
   @MessageMapping(Path.JOIN)
   public void join(User message, SimpMessageHeaderAccessor headerAccessor) {
     String username = message.getUsername();
+    String sessionId = headerAccessor.getSessionId();
 
     users.putIfAbsent(
-        username, User.builder().username(username).positionX(0).positionY(0).build());
+        sessionId, User.builder().username(username).positionX(0).positionY(0).build());
 
-    String sessionId = headerAccessor.getSessionId();
     sessionToUsername.put(sessionId, username);
 
     messagingTemplate.convertAndSend(Path.TOPIC_POSITION, users);
@@ -61,11 +62,9 @@ public class WebSocketController {
     String sessionId = headerAccessor.getSessionId();
 
     String username = sessionToUsername.remove(sessionId);
-    if (username != null) {
-      users.remove(username);
+    users.remove(sessionId);
+    messagingTemplate.convertAndSend(Path.TOPIC_POSITION, users);
 
-      messagingTemplate.convertAndSend(Path.TOPIC_POSITION, users);
-    }
     log.info("User {} disconnected", username);
   }
 }
