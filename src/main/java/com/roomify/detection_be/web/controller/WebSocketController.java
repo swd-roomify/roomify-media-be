@@ -23,8 +23,7 @@ public class WebSocketController {
   private final Map<String, String> sessionToUsername = new ConcurrentHashMap<>();
   private final SimpMessagingTemplate messagingTemplate;
 
-  public WebSocketController(
-      SimpMessagingTemplate messagingTemplate) {
+  public WebSocketController(SimpMessagingTemplate messagingTemplate) {
     this.messagingTemplate = messagingTemplate;
   }
 
