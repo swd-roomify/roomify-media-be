@@ -11,18 +11,13 @@ import org.springframework.web.socket.server.support.HttpSessionHandshakeInterce
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
-  private final HttpSessionHandshakeInterceptor corsInterceptor;
-
-  public WebSocketConfig(HttpSessionHandshakeInterceptor corsInterceptor) {
-    this.corsInterceptor = corsInterceptor;
-  }
 
   @Override
   public void registerStompEndpoints(StompEndpointRegistry registry) {
     registry
         .addEndpoint(Path.WEBSOCKET_ENDPOINT)
         .setAllowedOriginPatterns("*")
-        .addInterceptors(corsInterceptor)
+        .addInterceptors(new HttpSessionHandshakeInterceptor())
         .withSockJS();
   }
 
