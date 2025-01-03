@@ -1,7 +1,11 @@
 spring:
   application:
-    name: detection-be
-
+    name: ${APPLICATION_NAME:detection-be}
+  data:
+    redis:
+      port: ${REDIS_PORT:6379}
+      host: ${REDIS_HOST:localhost}
+      database: ${REDIS_DATABASE:0}
 server:
   port: ${SERVER_PORT:8081}
 

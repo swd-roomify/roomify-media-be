@@ -5,9 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 public class UserMove {
   private String username;
