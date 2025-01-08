@@ -50,9 +50,12 @@ public class WebSocketController {
                 .stream()
                 .collect(Collectors.toMap(
                         key -> key.substring(WS_USER_KEY_PREFIX.length()),
-                        key -> userRedisTemplate.opsForValue().get(key)
+                        key -> {
+                            return userRedisTemplate.opsForValue().get(key); // Handle null user case
+                        }
                 ));
     }
+
 
     @MessageMapping(Path.PATH)
     public void move(@Payload UserMove message) {
@@ -71,16 +74,23 @@ public class WebSocketController {
         String username = message.getUsername();
         String sessionId = headerAccessor.getSessionId();
 
-        userRedisTemplate.opsForValue().setIfAbsent(
-                getUserKey(username),
-                User.builder().username(username).positionX(0).positionY(0).build()
-        );
+        if (userRedisTemplate.opsForValue().get(getUserKey(username)) != null) {
+            log.info("User {} already exists in Redis", username);
+        } else {
+            userRedisTemplate.opsForValue().setIfAbsent(
+                    getUserKey(username),
+                    User.builder().username(username).positionX(0).positionY(0).build()
+            );
+            log.info("New user {} created in Redis", username);
+        }
 
         sessionRedisTemplate.opsForValue().set(getSessionKey(sessionId), username);
-
         messagingTemplate.convertAndSend(Path.TOPIC_POSITION, convertUserRedisToMap());
-        log.info("User {} joined {}", username, sessionId);
+
+        log.info("User {} joined session {}", username, sessionId);
     }
+
+
 
     @EventListener
     public void handleSessionDisconnect(SessionDisconnectEvent event) {
