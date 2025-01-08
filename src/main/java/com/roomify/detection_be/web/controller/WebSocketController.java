@@ -1,13 +1,12 @@
 package com.roomify.detection_be.web.controller;
 
+import com.roomify.detection_be.web.constants.RedisKeyPrefix;
 import com.roomify.detection_be.web.entity.User;
 import com.roomify.detection_be.web.entity.payload.UserMove;
-import jakarta.validation.Valid;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
@@ -16,56 +15,96 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 @Controller
 public class WebSocketController {
-  private static final Logger log = LoggerFactory.getLogger(WebSocketController.class);
-  private final Map<String, User> users = new ConcurrentHashMap<>();
-  private final Map<String, String> sessionToUsername = new ConcurrentHashMap<>();
-  private final SimpMessagingTemplate messagingTemplate;
+    private static final Logger log = LoggerFactory.getLogger(WebSocketController.class);
+    private final RedisTemplate<String, User> userRedisTemplate;
+    private final RedisTemplate<String, String> sessionRedisTemplate;
+    private final SimpMessagingTemplate messagingTemplate;
+    private final String WS_USER_KEY_PREFIX = RedisKeyPrefix.USER_KEY_PREFIX;
 
-  public WebSocketController(
-      SimpMessagingTemplate messagingTemplate) {
-    this.messagingTemplate = messagingTemplate;
-  }
-
-  @MessageMapping(Path.PATH)
-  public void move(@Valid @Payload UserMove message) {
-    users.put(
-        message.getUsername(),
-        User.builder()
-            .username(message.getUsername())
-            .positionX(message.getPositionX())
-            .positionY(message.getPositionY())
-            .build());
-
-    messagingTemplate.convertAndSend(Path.TOPIC_POSITION, users);
-  }
-
-  @MessageMapping(Path.JOIN)
-  public void join(User message, SimpMessageHeaderAccessor headerAccessor) {
-    String username = message.getUsername();
-
-    users.putIfAbsent(
-        username, User.builder().username(username).positionX(0).positionY(0).build());
-
-    String sessionId = headerAccessor.getSessionId();
-    sessionToUsername.put(sessionId, username);
-
-    messagingTemplate.convertAndSend(Path.TOPIC_POSITION, users);
-    log.info("User {} joined {}", username, sessionId);
-  }
-
-  @EventListener
-  public void handleSessionDisconnect(SessionDisconnectEvent event) {
-    StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
-    String sessionId = headerAccessor.getSessionId();
-
-    String username = sessionToUsername.remove(sessionId);
-    if (username != null) {
-      users.remove(username);
-
-      messagingTemplate.convertAndSend(Path.TOPIC_POSITION, users);
+    public WebSocketController(
+            RedisTemplate<String, User> userRedisTemplate,
+            RedisTemplate<String, String> sessionRedisTemplate,
+            SimpMessagingTemplate messagingTemplate) {
+        this.userRedisTemplate = userRedisTemplate;
+        this.sessionRedisTemplate = sessionRedisTemplate;
+        this.messagingTemplate = messagingTemplate;
     }
-    log.info("User {} disconnected", username);
-  }
+
+    private String getUserKey(String username) {
+        return WS_USER_KEY_PREFIX + username;
+    }
+
+    private String getSessionKey(String sessionId) {
+        String WS_SESSION_KEY_PREFIX = RedisKeyPrefix.SESSION_KEY_PREFIX;
+        return WS_SESSION_KEY_PREFIX + sessionId;
+    }
+
+    private Map<String, User> convertUserRedisToMap() {
+        return Objects.requireNonNull(userRedisTemplate.keys(WS_USER_KEY_PREFIX + "*"))
+                .stream()
+                .collect(Collectors.toMap(
+                        key -> key.substring(WS_USER_KEY_PREFIX.length()),
+                        key -> {
+                            return userRedisTemplate.opsForValue().get(key); // Handle null user case
+                        }
+                ));
+    }
+
+
+    @MessageMapping(Path.PATH)
+    public void move(@Payload UserMove message) {
+        User user = User.builder()
+                .username(message.getUsername())
+                .positionX(message.getPositionX())
+                .positionY(message.getPositionY())
+                .build();
+
+        userRedisTemplate.opsForValue().set(getUserKey(message.getUsername()), user);
+        messagingTemplate.convertAndSend(Path.TOPIC_POSITION, convertUserRedisToMap());
+    }
+
+    @MessageMapping(Path.JOIN)
+    public void join(User message, SimpMessageHeaderAccessor headerAccessor) {
+        String username = message.getUsername();
+        String sessionId = headerAccessor.getSessionId();
+
+        if (userRedisTemplate.opsForValue().get(getUserKey(username)) != null) {
+            log.info("User {} already exists in Redis", username);
+        } else {
+            userRedisTemplate.opsForValue().setIfAbsent(
+                    getUserKey(username),
+                    User.builder().username(username).positionX(0).positionY(0).build()
+            );
+            log.info("New user {} created in Redis", username);
+        }
+
+        sessionRedisTemplate.opsForValue().set(getSessionKey(sessionId), username);
+        messagingTemplate.convertAndSend(Path.TOPIC_POSITION, convertUserRedisToMap());
+
+        log.info("User {} joined session {}", username, sessionId);
+    }
+
+
+
+    @EventListener
+    public void handleSessionDisconnect(SessionDisconnectEvent event) {
+        StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
+        String sessionId = headerAccessor.getSessionId();
+        String sessionKey = getSessionKey(sessionId);
+
+        String username = sessionRedisTemplate.opsForValue().get(sessionKey);
+        if (username != null) {
+            userRedisTemplate.delete(getUserKey(username));
+            sessionRedisTemplate.delete(sessionKey);
+
+            messagingTemplate.convertAndSend(Path.TOPIC_POSITION, convertUserRedisToMap());
+        }
+        log.info("User {} disconnected", username);
+    }
 }
