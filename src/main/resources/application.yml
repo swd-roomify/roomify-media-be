@@ -5,7 +5,7 @@ spring:
     redis:
       port: ${REDIS_PORT:6379}
       host: ${REDIS_HOST:115.73.218.193}
-      database: ${REDIS_DATABASE:0}
+      database: 0
 server:
   port: ${SERVER_PORT:8081}
 
