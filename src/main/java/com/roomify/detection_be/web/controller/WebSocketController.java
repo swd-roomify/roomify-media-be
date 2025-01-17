@@ -1,5 +1,6 @@
 package com.roomify.detection_be.web.controller;
 
+import com.roomify.detection_be.utils.SnowflakeGenerator;
 import com.roomify.detection_be.web.constants.RedisKeyPrefix;
 import com.roomify.detection_be.web.entity.User;
 import com.roomify.detection_be.web.entity.payload.UserMove;
@@ -73,22 +74,33 @@ public class WebSocketController {
     public void join(User message, SimpMessageHeaderAccessor headerAccessor) {
         String username = message.getUsername();
         String sessionId = headerAccessor.getSessionId();
+        String userId;
 
-        if (userRedisTemplate.opsForValue().get(getUserKey(username)) != null) {
+        User existingUser = userRedisTemplate.opsForValue().get(getUserKey(username));
+        if (existingUser != null) {
             log.info("User {} already exists in Redis", username);
+            userId = existingUser.getUserId();
         } else {
+            SnowflakeGenerator snowflake = new SnowflakeGenerator(1); // Node ID = 1
+            userId = String.valueOf(snowflake.nextId());
             userRedisTemplate.opsForValue().setIfAbsent(
                     getUserKey(username),
-                    User.builder().username(username).positionX(0).positionY(0).build()
+                    User.builder()
+                            .userId(userId)
+                            .username(username)
+                            .positionX(0)
+                            .positionY(0)
+                            .build()
             );
-            log.info("New user {} created in Redis", username);
+            log.info("New user {} with ID {} created in Redis", username, userId);
         }
 
         sessionRedisTemplate.opsForValue().set(getSessionKey(sessionId), username);
         messagingTemplate.convertAndSend(Path.TOPIC_POSITION, convertUserRedisToMap());
 
-        log.info("User {} joined session {}", username, sessionId);
+        log.info("User {} joined session {} with ID {}", username, sessionId, userId);
     }
+
 
 
 

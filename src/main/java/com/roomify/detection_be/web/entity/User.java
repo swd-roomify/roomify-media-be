@@ -9,6 +9,7 @@ import lombok.*;
 @Setter
 @Builder
 public class User {
+  private String userId;
   private String username;
   private int positionX;
   private int positionY;

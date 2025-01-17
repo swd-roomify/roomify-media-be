@@ -10,6 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 public class UserMove {
+  private String userId;
   private String username;
   private int positionX;
   private int positionY;
