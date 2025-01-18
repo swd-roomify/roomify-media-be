@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
@@ -52,6 +53,7 @@ public class ConnectionController {
                 ));
     }
 
+    @MessageMapping(Path.JOIN)
     public void join(User message, SimpMessageHeaderAccessor headerAccessor) {
         String username = message.getUsername();
         String sessionId = headerAccessor.getSessionId();
