@@ -1,4 +1,4 @@
-package com.roomify.detection_be.utils;
+package com.roomify.detection_be.utility;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

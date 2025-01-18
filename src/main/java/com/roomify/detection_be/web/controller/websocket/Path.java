@@ -1,4 +1,4 @@
-package com.roomify.detection_be.web.controller;
+package com.roomify.detection_be.web.controller.websocket;
 
 public interface Path {
   String WEBSOCKET_ENDPOINT = "/ws";

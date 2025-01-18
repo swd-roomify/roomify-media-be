@@ -1,6 +1,6 @@
 package com.roomify.detection_be.config;
 
-import com.roomify.detection_be.web.controller.Path;
+import com.roomify.detection_be.web.controller.websocket.Path;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
