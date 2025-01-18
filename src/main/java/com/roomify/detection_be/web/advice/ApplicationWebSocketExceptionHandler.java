@@ -5,7 +5,7 @@ import com.roomify.detection_be.exception.ApplicationException;
 import com.roomify.detection_be.exception.NotFoundException;
 import com.roomify.detection_be.exception.ValidationException;
 import com.roomify.detection_be.utility.web.model.res.ErrorCode;
-import com.roomify.detection_be.web.controller.Path;
+import com.roomify.detection_be.web.constants.WebSocketPath;
 import java.util.Locale;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -65,6 +65,6 @@ public class ApplicationWebSocketExceptionHandler {
   private void sendError(ErrorCode errorCode, Object[] args) {
     Locale locale = LocaleContextHolder.getLocale();
     String errorMessage = messageSource.getMessage(errorCode.getSystemCode(), args, locale);
-    messagingTemplate.convertAndSend(Path.TOPIC_ERRORS, errorMessage);
+    messagingTemplate.convertAndSend(WebSocketPath.TOPIC_ERRORS, errorMessage);
   }
 }

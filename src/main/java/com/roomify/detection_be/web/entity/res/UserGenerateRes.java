@@ -1,4 +1,4 @@
-package com.roomify.detection_be.web.entity;
+package com.roomify.detection_be.web.entity.res;
 
 
 import lombok.*;
@@ -8,7 +8,8 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class User {
+public class UserGenerateRes {
+  private String userId;
   private String username;
   private int positionX;
   private int positionY;

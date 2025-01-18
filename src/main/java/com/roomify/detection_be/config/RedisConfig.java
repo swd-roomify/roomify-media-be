@@ -8,12 +8,13 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-import com.roomify.detection_be.web.entity.User;
+import com.roomify.detection_be.web.entity.res.UserGenerateRes;
 
 @Configuration
 public class RedisConfig {
     @Value("${spring.data.redis.host}")
     private String redisHost;
+    
     @Value("${spring.data.redis.port}")
     private int redisPort;
     @Bean
@@ -22,11 +23,11 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, User> userRedisTemplate(RedisConnectionFactory connectionFactory) {
-        RedisTemplate<String, User> template = new RedisTemplate<>();
+    public RedisTemplate<String, UserGenerateRes> userRedisTemplate(RedisConnectionFactory connectionFactory) {
+        RedisTemplate<String, UserGenerateRes> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
 
-        template.setValueSerializer(new Jackson2JsonRedisSerializer<>(User.class));
+        template.setValueSerializer(new Jackson2JsonRedisSerializer<>(UserGenerateRes.class));
         template.setKeySerializer(new StringRedisSerializer());
 
         return template;

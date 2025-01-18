@@ -1,6 +1,6 @@
 package com.roomify.detection_be.config;
 
-import com.roomify.detection_be.web.controller.Path;
+import com.roomify.detection_be.web.constants.WebSocketPath;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
@@ -15,7 +15,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
   @Override
   public void registerStompEndpoints(StompEndpointRegistry registry) {
     registry
-        .addEndpoint(Path.WEBSOCKET_ENDPOINT)
+        .addEndpoint(WebSocketPath.WEBSOCKET_ENDPOINT)
         .setAllowedOriginPatterns("*")
         .addInterceptors(new HttpSessionHandshakeInterceptor())
         .withSockJS();
@@ -23,7 +23,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
   @Override
   public void configureMessageBroker(MessageBrokerRegistry registry) {
-    registry.setApplicationDestinationPrefixes(Path.APP);
-    registry.enableSimpleBroker(Path.TOPIC);
+    registry.setApplicationDestinationPrefixes(WebSocketPath.APP);
+    registry.enableSimpleBroker(WebSocketPath.TOPIC);
   }
 }

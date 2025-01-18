@@ -1,6 +1,6 @@
-package com.roomify.detection_be.web.controller;
+package com.roomify.detection_be.web.constants;
 
-public interface Path {
+public interface WebSocketPath {
   String WEBSOCKET_ENDPOINT = "/ws";
   String APP = "/app";
   String TOPIC = "/topic";
