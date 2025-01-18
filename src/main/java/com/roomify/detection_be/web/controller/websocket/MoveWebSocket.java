@@ -1,7 +1,8 @@
 package com.roomify.detection_be.web.controller.websocket;
 
 import com.roomify.detection_be.web.constants.WebSocketPath;
-import com.roomify.detection_be.web.entity.User;
+import com.roomify.detection_be.web.entity.req.UserMoveReq;
+import com.roomify.detection_be.web.entity.res.UserGenerateRes;
 import com.roomify.detection_be.web.service.MoveService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,14 +23,16 @@ public class MoveWebSocket {
     }
 
     @MessageMapping(WebSocketPath.PATH)
-    public void move(@Payload User message) {
-        User user = User.builder()
+    public void move(@Payload UserMoveReq message) {
+        log.info("About to move user: " + message.getUserId() + " with the username: " + message.getUsername());
+        UserGenerateRes userGenerateRes = UserGenerateRes.builder()
                 .username(message.getUsername())
+                .userId(message.getUserId())
                 .positionX(message.getPositionX())
                 .positionY(message.getPositionY())
                 .build();
 
-        moveService.saveUserPosition(user);
+        moveService.saveUserPosition(userGenerateRes);
 
         messagingTemplate.convertAndSend(WebSocketPath.TOPIC_POSITION, moveService.getAllUsers());
     }

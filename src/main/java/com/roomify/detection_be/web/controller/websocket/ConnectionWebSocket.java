@@ -1,7 +1,8 @@
 package com.roomify.detection_be.web.controller.websocket;
 
 import com.roomify.detection_be.web.constants.WebSocketPath;
-import com.roomify.detection_be.web.entity.User;
+import com.roomify.detection_be.web.entity.req.UserJoinReq;
+import com.roomify.detection_be.web.entity.res.UserGenerateRes;
 import com.roomify.detection_be.web.service.ConnectionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,14 +27,19 @@ public class ConnectionWebSocket {
     }
 
     @MessageMapping(WebSocketPath.JOIN)
-    public void join(User message, SimpMessageHeaderAccessor headerAccessor) {
+    public void join(UserJoinReq user, SimpMessageHeaderAccessor headerAccessor) {
+        log.info("Raw message: {}", user);
+        log.info("Received user details: userId={}, username={}",
+                user.getUserId(), user.getUsername());
+
         String sessionId = headerAccessor.getSessionId();
-        String userId = connectionService.saveUserAndSession(message, sessionId);
+        String userId = connectionService.saveUserAndSession(user, sessionId);
 
         messagingTemplate.convertAndSend(WebSocketPath.TOPIC_POSITION, connectionService.getAllUsers());
 
-        log.info("User {} joined session {} with ID {}", message.getUsername(), sessionId, userId);
+        log.info("User {} joined session {} with ID {}", user.getUsername(), sessionId, userId);
     }
+
 
     @EventListener
     public void handleSessionDisconnect(SessionDisconnectEvent event) {

@@ -2,7 +2,7 @@ package com.roomify.detection_be.web.service;
 
 
 import com.roomify.detection_be.web.constants.RedisKeyPrefix;
-import com.roomify.detection_be.web.entity.User;
+import com.roomify.detection_be.web.entity.res.UserGenerateRes;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +12,10 @@ import java.util.stream.Collectors;
 
 @Service
 public class MoveService {
-    private final RedisTemplate<String, User> userRedisTemplate;
+    private final RedisTemplate<String, UserGenerateRes> userRedisTemplate;
     private final String WS_USER_KEY_PREFIX = RedisKeyPrefix.USER_KEY_PREFIX;
 
-    public MoveService(RedisTemplate<String, User> userRedisTemplate) {
+    public MoveService(RedisTemplate<String, UserGenerateRes> userRedisTemplate) {
         this.userRedisTemplate = userRedisTemplate;
     }
 
@@ -23,11 +23,11 @@ public class MoveService {
         return WS_USER_KEY_PREFIX + username;
     }
 
-    public void saveUserPosition(User user) {
-        userRedisTemplate.opsForValue().set(getUserKey(user.getUsername()), user);
+    public void saveUserPosition(UserGenerateRes userGenerateRes) {
+        userRedisTemplate.opsForValue().set(getUserKey(userGenerateRes.getUsername()), userGenerateRes);
     }
 
-    public Map<String, User> getAllUsers() {
+    public Map<String, UserGenerateRes> getAllUsers() {
         return Objects.requireNonNull(userRedisTemplate.keys(WS_USER_KEY_PREFIX + "*"))
                 .stream()
                 .collect(Collectors.toMap(
