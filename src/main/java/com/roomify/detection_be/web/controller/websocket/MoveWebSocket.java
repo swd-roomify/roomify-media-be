@@ -1,5 +1,6 @@
 package com.roomify.detection_be.web.controller.websocket;
 
+import com.roomify.detection_be.web.constants.WebSocketPath;
 import com.roomify.detection_be.web.entity.User;
 import com.roomify.detection_be.web.service.MoveService;
 import org.slf4j.Logger;
@@ -20,7 +21,7 @@ public class MoveWebSocket {
         this.messagingTemplate = messagingTemplate;
     }
 
-    @MessageMapping(Path.PATH)
+    @MessageMapping(WebSocketPath.PATH)
     public void move(@Payload User message) {
         User user = User.builder()
                 .username(message.getUsername())
@@ -30,6 +31,6 @@ public class MoveWebSocket {
 
         moveService.saveUserPosition(user);
 
-        messagingTemplate.convertAndSend(Path.TOPIC_POSITION, moveService.getAllUsers());
+        messagingTemplate.convertAndSend(WebSocketPath.TOPIC_POSITION, moveService.getAllUsers());
     }
 }

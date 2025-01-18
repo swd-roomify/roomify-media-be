@@ -1,6 +1,6 @@
 package com.roomify.detection_be.web.advice;
 
-import com.roomify.detection_be.web.controller.websocket.Path;
+import com.roomify.detection_be.web.constants.WebSocketPath;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
@@ -13,8 +13,8 @@ public class WebsocketErrorsHandler {
     this.messagingTemplate = messagingTemplate;
   }
 
-  @MessageMapping(Path.ERRORS)
+  @MessageMapping(WebSocketPath.ERRORS)
   public void handleErrors(String errorMessage) {
-    messagingTemplate.convertAndSend(Path.TOPIC_ERRORS, errorMessage);
+    messagingTemplate.convertAndSend(WebSocketPath.TOPIC_ERRORS, errorMessage);
   }
 }
