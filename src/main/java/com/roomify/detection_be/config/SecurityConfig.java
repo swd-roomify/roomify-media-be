@@ -16,7 +16,7 @@ public class SecurityConfig {
       public void addCorsMappings(CorsRegistry registry) {
         registry
             .addMapping("/**")
-            .allowedOrigins("http://pog.threemusketeer.click:5173", "http://localhost:5173")
+            .allowedOrigins("http://pog.threemusketeer.click:5173", "http://localhost:5173", "https://pog.threemusketeer.click")
             .allowedMethods("GET", "POST", "PUT", "DELETE")
             .allowedHeaders("*")
             .allowCredentials(true);

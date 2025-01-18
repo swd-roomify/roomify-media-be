@@ -4,8 +4,8 @@ spring:
   data:
     redis:
       port: ${REDIS_PORT:6379}
-      host: ${REDIS_HOST:localhost}
-      database: ${REDIS_DATABASE:0}
+      host: ${REDIS_HOST:115.73.218.193}
+      database: 0
 server:
   port: ${SERVER_PORT:8081}
 
