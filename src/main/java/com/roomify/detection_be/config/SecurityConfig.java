@@ -16,10 +16,10 @@ public class SecurityConfig {
       public void addCorsMappings(CorsRegistry registry) {
         registry
             .addMapping("/**")
-            .allowedOrigins("http://pog.threemusketeer.click:5173", "http://localhost:5173", "https://pog.threemusketeer.click")
+            .allowedOrigins("*")
             .allowedMethods("GET", "POST", "PUT", "DELETE")
             .allowedHeaders("*")
-            .allowCredentials(true);
+            .allowCredentials(false);
       }
     };
   }
