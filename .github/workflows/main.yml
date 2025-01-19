@@ -17,13 +17,15 @@ jobs:
       uses: webfactory/ssh-agent@v0.9.0
       with:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-    - name: Install sshpass
-      run: sudo apt-get update && sudo apt-get install -y sshpass
+        
+    - name: Add host to known_hosts
+      run: |
+        mkdir -p ~/.ssh
+        ssh-keyscan -H pog.threemusketeer.click >> ~/.ssh/known_hosts
     
     - name: Connect, Pull, and Build Docker
       run: |
-        sshpass -p "${{ secrets.SSH_PASS }}" ssh -o StrictHostKeyChecking=no admin@pog.threemusketeer.click << EOF
+        ssh admin@pog.threemusketeer.click << EOF
           set -e
           cd /home/admin/Documents/roomify/roomify-media-be
           git stash | true
