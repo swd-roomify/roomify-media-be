@@ -9,6 +9,10 @@ public interface WebSocketPath {
   String PATH = "/move";
   String JOIN = "/join";
 
+  String CHAT = "/chat";
+
+
   String TOPIC_POSITION = TOPIC + "/positions";
+  String TOPIC_CHAT = TOPIC + CHAT;
   String TOPIC_ERRORS = TOPIC + ERRORS;
 }
