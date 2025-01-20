@@ -13,4 +13,6 @@ public class UserJoinReq {
     private String userId;
     @JsonProperty("username")
     private String username;
+    @JsonProperty("character")
+    private String character;
 }

@@ -29,15 +29,15 @@ public class ConnectionWebSocket {
     @MessageMapping(WebSocketPath.JOIN)
     public void join(UserJoinReq user, SimpMessageHeaderAccessor headerAccessor) {
         log.info("Raw message: {}", user);
-        log.info("Received user details: userId={}, username={}",
-                user.getUserId(), user.getUsername());
+        log.info("Received user details: userId={}, username={}, character={}",
+                user.getUserId(), user.getUsername(), user.getCharacter());
 
         String sessionId = headerAccessor.getSessionId();
         String userId = connectionService.saveUserAndSession(user, sessionId);
 
         messagingTemplate.convertAndSend(WebSocketPath.TOPIC_POSITION, connectionService.getAllUsers());
 
-        log.info("User {} joined session {} with ID {}", user.getUsername(), sessionId, userId);
+        log.info("User {} joined session {} with ID {} and character {}", user.getUsername(), sessionId, userId, user.getCharacter());
     }
 
 

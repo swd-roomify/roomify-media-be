@@ -2,6 +2,7 @@ package com.roomify.detection_be.web.service;
 
 import com.roomify.detection_be.utility.SnowflakeGenerator;
 import com.roomify.detection_be.web.controller.websocket.ConnectionWebSocket;
+import com.roomify.detection_be.web.entity.req.UserGenerateReq;
 import com.roomify.detection_be.web.entity.res.UserGenerateRes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,18 +17,18 @@ public class UserService {
         this.userRedisTemplate = userRedisTemplate;
     }
 
-    public UserGenerateRes generateUser(String username) {
+    public UserGenerateRes generateUser(UserGenerateReq user) {
         SnowflakeGenerator snowflake = new SnowflakeGenerator(1);
         String userId = String.valueOf(snowflake.nextId());
 
         UserGenerateRes newUserGenerateRes = UserGenerateRes.builder()
                 .userId(userId)
-                .username(username)
+                .username(user.getUsername())
                 .positionX(200)
                 .positionY(200)
+                .character(user.getCharacter())
                 .build();
-        log.info("User {} generated with ID {}", username, userId);
-        userRedisTemplate.opsForValue().set("USER_" + username, newUserGenerateRes);
+        userRedisTemplate.opsForValue().set("USER_" + user, newUserGenerateRes);
 
         return newUserGenerateRes;
     }

@@ -24,12 +24,12 @@ public class MoveWebSocket {
 
     @MessageMapping(WebSocketPath.PATH)
     public void move(@Payload UserMoveReq message) {
-        log.info("About to move user: " + message.getUserId() + " with the username: " + message.getUsername());
         UserGenerateRes userGenerateRes = UserGenerateRes.builder()
                 .username(message.getUsername())
                 .userId(message.getUserId())
                 .positionX(message.getPositionX())
                 .positionY(message.getPositionY())
+                .character(message.getCharacter())
                 .build();
 
         moveService.saveUserPosition(userGenerateRes);

@@ -39,7 +39,7 @@ public class ConnectionService {
     public String saveUserAndSession(UserJoinReq message, String sessionId) {
         String username = message.getUsername();
         String userId = message.getUserId();
-
+        String character = message.getCharacter();
         sessionRedisTemplate.opsForValue().set(getSessionKey(sessionId), username);
         return userId;
     }

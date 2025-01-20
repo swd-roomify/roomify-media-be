@@ -13,6 +13,8 @@ public class UserMoveReq {
     private String userId;
     @JsonProperty("username")
     private String username;
+    @JsonProperty("character")
+    private String character;
     private int positionX;
     private int positionY;
 }
