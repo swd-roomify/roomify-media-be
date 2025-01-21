@@ -28,7 +28,7 @@ public class UserService {
                 .positionY(200)
                 .character(user.getCharacter())
                 .build();
-        userRedisTemplate.opsForValue().set("USER_" + user, newUserGenerateRes);
+        userRedisTemplate.opsForValue().set("USER_" + newUserGenerateRes.getUserId(), newUserGenerateRes);
 
         return newUserGenerateRes;
     }

@@ -19,12 +19,12 @@ public class MoveService {
         this.userRedisTemplate = userRedisTemplate;
     }
 
-    private String getUserKey(String username) {
-        return WS_USER_KEY_PREFIX + username;
+    private String getUserKey(String userId) {
+        return WS_USER_KEY_PREFIX + userId;
     }
 
     public void saveUserPosition(UserGenerateRes userGenerateRes) {
-        userRedisTemplate.opsForValue().set(getUserKey(userGenerateRes.getUsername()), userGenerateRes);
+        userRedisTemplate.opsForValue().set(getUserKey(userGenerateRes.getUserId()), userGenerateRes);
     }
 
     public Map<String, UserGenerateRes> getAllUsers() {

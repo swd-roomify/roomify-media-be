@@ -27,8 +27,8 @@ public class ConnectionService {
         this.sessionRedisTemplate = sessionRedisTemplate;
     }
 
-    private String getUserKey(String username) {
-        return WS_USER_KEY_PREFIX + username;
+    private String getUserKey(String userId) {
+        return WS_USER_KEY_PREFIX + userId;
     }
 
     private String getSessionKey(String sessionId) {
@@ -40,7 +40,7 @@ public class ConnectionService {
         String username = message.getUsername();
         String userId = message.getUserId();
         String character = message.getCharacter();
-        sessionRedisTemplate.opsForValue().set(getSessionKey(sessionId), username);
+        sessionRedisTemplate.opsForValue().set(getSessionKey(sessionId), userId);
         return userId;
     }
 
@@ -55,10 +55,10 @@ public class ConnectionService {
 
     public void removeUserBySession(String sessionId) {
         String sessionKey = getSessionKey(sessionId);
-        String username = sessionRedisTemplate.opsForValue().get(sessionKey);
+        String userId = sessionRedisTemplate.opsForValue().get(sessionKey);
 
-        userRedisTemplate.delete(getUserKey(username));
+        userRedisTemplate.delete(getUserKey(userId));
         sessionRedisTemplate.delete(sessionKey);
-        log.info("User {} removed from Redis", username);
+        log.info("User {} removed from Redis", userId);
     }
 }
