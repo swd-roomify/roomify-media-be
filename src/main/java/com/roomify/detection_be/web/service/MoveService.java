@@ -2,7 +2,10 @@ package com.roomify.detection_be.web.service;
 
 
 import com.roomify.detection_be.web.constants.RedisKeyPrefix;
+import com.roomify.detection_be.web.controller.websocket.ConnectionWebSocket;
 import com.roomify.detection_be.web.entity.res.UserGenerateRes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +15,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class MoveService {
+    private static final Logger log = LoggerFactory.getLogger(ConnectionWebSocket.class);
     private final RedisTemplate<String, UserGenerateRes> userRedisTemplate;
     private final String WS_USER_KEY_PREFIX = RedisKeyPrefix.USER_KEY_PREFIX;
 
@@ -24,7 +28,11 @@ public class MoveService {
     }
 
     public void saveUserPosition(UserGenerateRes userGenerateRes) {
-        userRedisTemplate.opsForValue().set(getUserKey(userGenerateRes.getUserId()), userGenerateRes);
+        UserGenerateRes existingUser = userRedisTemplate.opsForValue().get(getUserKey(userGenerateRes.getUserId()));
+        log.info(existingUser.toString());
+        existingUser.setPositionX(userGenerateRes.getPositionX());
+        existingUser.setPositionY(userGenerateRes.getPositionY());
+        userRedisTemplate.opsForValue().set(getUserKey(userGenerateRes.getUserId()), existingUser);
     }
 
     public Map<String, UserGenerateRes> getAllUsers() {

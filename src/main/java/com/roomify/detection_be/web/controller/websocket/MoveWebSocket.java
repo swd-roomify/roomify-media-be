@@ -25,13 +25,10 @@ public class MoveWebSocket {
     @MessageMapping(WebSocketPath.PATH)
     public void move(@Payload UserMoveReq message) {
         UserGenerateRes userGenerateRes = UserGenerateRes.builder()
-                .username(message.getUsername())
                 .userId(message.getUserId())
                 .positionX(message.getPositionX())
                 .positionY(message.getPositionY())
-                .character(message.getCharacter())
                 .build();
-
         moveService.saveUserPosition(userGenerateRes);
 
         messagingTemplate.convertAndSend(WebSocketPath.TOPIC_POSITION, moveService.getAllUsers());
