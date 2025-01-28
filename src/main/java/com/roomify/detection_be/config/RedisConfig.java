@@ -1,6 +1,8 @@
 package com.roomify.detection_be.config;
 
+import com.roomify.detection_be.web.constants.RedisKeyPrefix;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -9,6 +11,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import com.roomify.detection_be.web.entity.res.UserGenerateRes;
+
+import java.util.Set;
 
 @Configuration
 public class RedisConfig {
@@ -42,5 +46,39 @@ public class RedisConfig {
         template.setValueSerializer(new StringRedisSerializer());
 
         return template;
+    }
+    @Bean
+    public CommandLineRunner startupCleaner(RedisTemplate<String, UserGenerateRes> userRedisTemplate,
+                                            RedisTemplate<String, String> sessionRedisTemplate) {
+        return args -> {
+            clearRedis(userRedisTemplate, sessionRedisTemplate);
+        };
+    }
+
+    @Bean
+    public Thread shutdownHook(RedisTemplate<String, UserGenerateRes> userRedisTemplate,
+                               RedisTemplate<String, String> sessionRedisTemplate) {
+        Thread shutdownThread = new Thread(() -> {
+            clearRedis(userRedisTemplate, sessionRedisTemplate);
+        });
+
+        Runtime.getRuntime().addShutdownHook(shutdownThread);
+        return shutdownThread;
+    }
+
+    private void clearRedis(RedisTemplate<String, UserGenerateRes> userRedisTemplate,
+                            RedisTemplate<String, String> sessionRedisTemplate) {
+        try {
+            Set<String> userKeys = userRedisTemplate.keys(RedisKeyPrefix.USER_KEY_PREFIX + "*");
+            if (userKeys != null && !userKeys.isEmpty()) {
+                userRedisTemplate.delete(userKeys);
+            }
+
+            Set<String> sessionKeys = sessionRedisTemplate.keys(RedisKeyPrefix.SESSION_KEY_PREFIX + "*");
+            if (sessionKeys != null && !sessionKeys.isEmpty()) {
+                sessionRedisTemplate.delete(sessionKeys);
+            }
+        } catch (Exception e) {
+        }
     }
 }
