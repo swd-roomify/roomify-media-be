@@ -1,11 +1,55 @@
 spring:
+  main:
+    allow-circular-references: true
   application:
-    name: ${APPLICATION_NAME:detection-be}
+    name: ${APPLICATION_NAME}
   data:
     redis:
-      port: ${REDIS_PORT:6379}
-      host: ${REDIS_HOST:115.73.218.193}
-      database: 0
+      port: ${REDIS_PORT}
+      host: ${REDIS_HOST}
+      database: ${REDIS_DATABASE}
+  datasource:
+      url: ${DB_URL}
+      username: ${DB_USERNAME}
+      password: ${DB_PASSWORD}
+      driver-class-name: ${DB_DRIVER}
+
+  sql:
+    init:
+      mode: always
+  jpa:
+    database-platform: org.hibernate.dialect.SQLServerDialect
+    hibernate:
+      ddl-auto: update
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            redirect-uri: "http://localhost:8081/login/oauth2/code/google"
+            scope:
+              - email
+              - profile
+            client-name: Google
+          github:
+            client-id: ${GITHUB_CLIENT_ID}
+            client-secret: ${GITHUB_CLIENT_SECRET}
+            redirect-uri: "http://localhost:8081/login/oauth2/code/github"
+            scope:
+              - read:user
+              - user:email
+            client-name: GitHub
+        provider:
+          google:
+            authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
+            token-uri: https://oauth2.googleapis.com/token
+            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+          github:
+            authorization-uri: https://github.com/login/oauth/authorize
+            token-uri: https://github.com/login/oauth/access_token
+            user-info-uri: https://api.github.com/user
 server:
   port: ${SERVER_PORT:8081}
 
@@ -20,3 +64,9 @@ logging:
     org.springframework.web.socket=DEBUG:
     org.springframework.web=DEBUG:
 
+jwt:
+  url: /api/v1/login/non-type
+  header: Authorization
+  prefix: Bearer
+  expiration: 3600 # Tính bằng giây (60*60)
+  secret: ${JWT_SECRET}

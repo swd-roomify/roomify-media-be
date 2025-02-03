@@ -1,6 +1,5 @@
 package com.roomify.detection_be.web.controller.api;
 
-
 import com.roomify.detection_be.web.controller.websocket.ConnectionWebSocket;
 import com.roomify.detection_be.web.entity.req.UserGenerateReq;
 import com.roomify.detection_be.web.entity.res.UserGenerateRes;
@@ -21,6 +20,7 @@ public class UserController {
     @Autowired
     private final UserService userService;
     private static final Logger log = LoggerFactory.getLogger(ConnectionWebSocket.class);
+
     @PostMapping("/generate")
     public UserGenerateRes generateUser(@RequestBody UserGenerateReq user) {
         return userService.generateUser(user);

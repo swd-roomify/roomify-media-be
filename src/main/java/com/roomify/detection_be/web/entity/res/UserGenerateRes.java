@@ -2,7 +2,10 @@ package com.roomify.detection_be.web.entity.res;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.roomify.detection_be.web.entity.Role;
+import jakarta.persistence.*;
 import lombok.*;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -10,9 +13,13 @@ import lombok.*;
 @Setter
 @Builder
 public class UserGenerateRes {
-  private String userId;
-  private String username;
-  private String character;
-  private int positionX;
-  private int positionY;
+    @JsonProperty("userId")
+    private String userId;
+    @JsonProperty("username")
+    private String username;
+    @JsonProperty("character")
+    private String character;
+    private int positionX;
+    private int positionY;
+
 }

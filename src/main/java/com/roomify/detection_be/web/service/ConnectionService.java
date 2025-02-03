@@ -61,4 +61,5 @@ public class ConnectionService {
         sessionRedisTemplate.delete(sessionKey);
         log.info("User {} removed from Redis", username);
     }
+
 }

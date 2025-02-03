@@ -1,14 +1,12 @@
 package com.roomify.detection_be.web.service;
 
-
 import com.roomify.detection_be.web.constants.RedisKeyPrefix;
 import com.roomify.detection_be.web.entity.res.UserGenerateRes;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Service;
-
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
 
 @Service
 public class MoveService {
@@ -28,11 +26,10 @@ public class MoveService {
     }
 
     public Map<String, UserGenerateRes> getAllUsers() {
-        return Objects.requireNonNull(userRedisTemplate.keys(WS_USER_KEY_PREFIX + "*"))
-                .stream()
-                .collect(Collectors.toMap(
-                        key -> key.substring(WS_USER_KEY_PREFIX.length()),
-                        key -> userRedisTemplate.opsForValue().get(key)
-                ));
+        return Objects.requireNonNull(userRedisTemplate.keys(WS_USER_KEY_PREFIX + "*")).stream()
+                .collect(
+                        Collectors.toMap(
+                                key -> key.substring(WS_USER_KEY_PREFIX.length()),
+                                key -> userRedisTemplate.opsForValue().get(key)));
     }
 }
