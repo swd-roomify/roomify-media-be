@@ -6,6 +6,8 @@ spring:
       port: ${REDIS_PORT:6379}
       host: ${REDIS_HOST:115.73.218.193}
       database: 0
+
+
 server:
   port: ${SERVER_PORT:8081}
 
@@ -20,3 +22,6 @@ logging:
     org.springframework.web.socket=DEBUG:
     org.springframework.web=DEBUG:
 
+app:
+  jwt-secret: ${JWT_SECRET:123456}
+  jwt-expiration-milliseconds: ${JWT_EXPIRATION:86400000}

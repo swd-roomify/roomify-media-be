@@ -1,4 +1,4 @@
-package com.roomify.detection_be.web.entity.req;
+package com.roomify.detection_be.web.dtos.req;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;

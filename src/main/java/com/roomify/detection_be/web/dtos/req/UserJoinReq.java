@@ -1,4 +1,4 @@
-package com.roomify.detection_be.web.entity.req;
+package com.roomify.detection_be.web.dtos.req;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -8,9 +8,11 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class UserMoveReq {
+public class UserJoinReq {
     @JsonProperty("userId")
     private String userId;
-    private int positionX;
-    private int positionY;
+    @JsonProperty("username")
+    private String username;
+    @JsonProperty("character")
+    private String character;
 }

@@ -6,6 +6,8 @@ public interface WebSocketPath {
   String TOPIC = "/topic";
   String ERRORS = "/errors";
 
+  String ROOMS = "/rooms";
+
   String PATH = "/move";
   String JOIN = "/join";
 

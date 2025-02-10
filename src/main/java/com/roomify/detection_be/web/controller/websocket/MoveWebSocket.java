@@ -1,9 +1,9 @@
 package com.roomify.detection_be.web.controller.websocket;
 
 import com.roomify.detection_be.web.constants.WebSocketPath;
-import com.roomify.detection_be.web.entity.req.UserMoveReq;
-import com.roomify.detection_be.web.entity.res.UserGenerateRes;
-import com.roomify.detection_be.web.service.MoveService;
+import com.roomify.detection_be.web.dtos.req.UserMoveReq;
+import com.roomify.detection_be.web.dtos.res.UserWSRes;
+import com.roomify.detection_be.web.service.websocket.MoveService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -24,12 +24,12 @@ public class MoveWebSocket {
 
     @MessageMapping(WebSocketPath.PATH)
     public void move(@Payload UserMoveReq message) {
-        UserGenerateRes userGenerateRes = UserGenerateRes.builder()
+        UserWSRes userWSRes = UserWSRes.builder()
                 .userId(message.getUserId())
                 .positionX(message.getPositionX())
                 .positionY(message.getPositionY())
                 .build();
-        moveService.saveUserPosition(userGenerateRes);
+        moveService.saveUserPosition(userWSRes);
 
         messagingTemplate.convertAndSend(WebSocketPath.TOPIC_POSITION, moveService.getAllUsers());
     }

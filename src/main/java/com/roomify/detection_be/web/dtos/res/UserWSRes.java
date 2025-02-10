@@ -1,7 +1,6 @@
-package com.roomify.detection_be.web.entity.res;
+package com.roomify.detection_be.web.dtos.res;
 
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 @AllArgsConstructor
@@ -9,7 +8,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class UserGenerateRes {
+public class UserWSRes {
   private String userId;
   private String username;
   private String character;

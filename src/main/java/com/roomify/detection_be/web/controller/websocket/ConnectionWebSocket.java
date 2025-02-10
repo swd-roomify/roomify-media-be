@@ -1,9 +1,8 @@
 package com.roomify.detection_be.web.controller.websocket;
 
 import com.roomify.detection_be.web.constants.WebSocketPath;
-import com.roomify.detection_be.web.entity.req.UserJoinReq;
-import com.roomify.detection_be.web.entity.res.UserGenerateRes;
-import com.roomify.detection_be.web.service.ConnectionService;
+import com.roomify.detection_be.web.dtos.req.UserJoinReq;
+import com.roomify.detection_be.web.service.websocket.ConnectionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
@@ -14,7 +13,6 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
-@Controller
 public class ConnectionWebSocket {
     private static final Logger log = LoggerFactory.getLogger(ConnectionWebSocket.class);
     private final ConnectionService connectionService;
@@ -40,16 +38,4 @@ public class ConnectionWebSocket {
         log.info("User {} joined session {} with ID {} and character {}", user.getUsername(), sessionId, userId, user.getCharacter());
     }
 
-
-    @EventListener
-    public void handleSessionDisconnect(SessionDisconnectEvent event) {
-        StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
-        String sessionId = headerAccessor.getSessionId();
-
-        connectionService.removeUserBySession(sessionId);
-
-        messagingTemplate.convertAndSend(WebSocketPath.TOPIC_POSITION, connectionService.getAllUsers());
-
-        log.info("User disconnected, session ID: {}", sessionId);
-    }
 }

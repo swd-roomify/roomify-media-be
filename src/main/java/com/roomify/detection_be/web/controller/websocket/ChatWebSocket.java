@@ -1,8 +1,7 @@
 package com.roomify.detection_be.web.controller.websocket;
 
 import com.roomify.detection_be.web.constants.WebSocketPath;
-import com.roomify.detection_be.web.entity.req.UserChatReq;
-import com.roomify.detection_be.web.service.ConnectionService;
+import com.roomify.detection_be.web.dtos.req.UserChatReq;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.MessageMapping;
