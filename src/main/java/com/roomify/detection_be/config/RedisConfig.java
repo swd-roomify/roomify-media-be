@@ -85,12 +85,12 @@ public class RedisConfig {
     private void clearRedis(RedisTemplate<String, UserWSRes> roomUserRedisTemplate,
                             RedisTemplate<String, String> roomSessionRedisTemplate) {
         try {
-            Set<String> userKeys = roomUserRedisTemplate.keys(RedisKeyPrefix.USER_KEY_PREFIX + "*");
+            Set<String> userKeys = roomUserRedisTemplate.keys("*");
             if (userKeys != null && !userKeys.isEmpty()) {
                 roomUserRedisTemplate.delete(userKeys);
             }
 
-            Set<String> sessionKeys = roomSessionRedisTemplate.keys(RedisKeyPrefix.SESSION_KEY_PREFIX + "*");
+            Set<String> sessionKeys = roomSessionRedisTemplate.keys( "*");
             if (sessionKeys != null && !sessionKeys.isEmpty()) {
                 roomSessionRedisTemplate.delete(sessionKeys);
             }

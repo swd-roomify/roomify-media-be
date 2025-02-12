@@ -12,6 +12,7 @@ import org.springframework.web.socket.server.support.HttpSessionHandshakeInterce
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
+
   @Override
   public void registerStompEndpoints(StompEndpointRegistry registry) {
     registry

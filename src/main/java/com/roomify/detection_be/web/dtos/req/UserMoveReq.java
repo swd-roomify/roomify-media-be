@@ -11,6 +11,8 @@ import lombok.*;
 public class UserMoveReq {
     @JsonProperty("userId")
     private String userId;
+    @JsonProperty("positionX")
     private int positionX;
+    @JsonProperty("positionY")
     private int positionY;
 }

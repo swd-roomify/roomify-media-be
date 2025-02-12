@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
+import static org.springframework.boot.convert.ApplicationConversionService.configure;
+
 @Configuration
 public class AppConfig {
   @Bean
@@ -17,7 +19,12 @@ public class AppConfig {
             .accessorNaming(new Provider().withBuilderPrefix(""))
             .configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true)
             .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
-            .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
+            .configure(MapperFeature.ALLOW_COERCION_OF_SCALARS, false)
+            .configure(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS, true)
+            .configure(DeserializationFeature.USE_LONG_FOR_INTS, true)
+            .configure(DeserializationFeature.ACCEPT_FLOAT_AS_INT, false)
+            .enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING)
+            .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE) //remember to change to lower camel case later
             .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
             .build();
 

@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/rooms")
 public class RoomController {
@@ -17,7 +19,7 @@ public class RoomController {
         return ResponseEntity.ok(roomService.CreateRoom(room));
     }
 
-    @GetMapping("/id/{roomId}")
+    @GetMapping("/room/{roomId}")
     public ResponseEntity<RoomDtoRes> GetRoomById(@PathVariable String roomId) {
         return ResponseEntity.ok(roomService.GetRoomById(roomId));
     }
@@ -25,5 +27,10 @@ public class RoomController {
     @GetMapping("/code/{roomCode}")
     public ResponseEntity<RoomDtoRes> GetRoomByCode(@PathVariable String roomCode) {
         return ResponseEntity.ok(roomService.GetRoomByCode(roomCode));
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<RoomDtoRes>> GetRoomByUserId(@PathVariable String userId) {
+        return ResponseEntity.ok(roomService.GetRoomsByUserId(userId));
     }
 }

@@ -15,4 +15,5 @@ public class UserJoinReq {
     private String username;
     @JsonProperty("character")
     private String character;
+
 }

@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @Service
 public class RoomService {
     @Autowired
@@ -45,5 +47,10 @@ public class RoomService {
         Room room = roomRepository.findByRoomCode(roomCode)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatusCode.valueOf(404), "Room not found"));
         return new RoomDtoRes(room.getRoomId(), room.getRoomName(), room.getRoomCode(), room.getHostId().getUserId(), room.getCreatedAt());
+    }
+
+    public List<RoomDtoRes> GetRoomsByUserId(String userId) {
+        List<Room> rooms = roomRepository.findByHostId_UserId(userId);
+        return rooms.stream().map(room -> new RoomDtoRes(room.getRoomId(), room.getRoomName(), room.getRoomCode(), room.getHostId().getUserId(), room.getCreatedAt())).toList();
     }
 }

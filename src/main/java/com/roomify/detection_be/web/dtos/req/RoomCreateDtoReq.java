@@ -1,5 +1,6 @@
 package com.roomify.detection_be.web.dtos.req;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class RoomCreateDtoReq {
+    @JsonProperty("roomName")
     private String roomName;
+    @JsonProperty("hostId")
     private String hostId;
 }

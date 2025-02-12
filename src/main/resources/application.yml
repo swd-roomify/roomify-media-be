@@ -23,5 +23,5 @@ logging:
     org.springframework.web=DEBUG:
 
 app:
-  jwt-secret: ${JWT_SECRET:123456}
+  jwt-secret: ${JWT_SECRET:FBu8YFbkcrgG9UUFbBKTTlkO5Md8Nd5Cf7O2V4uqs1I=}
   jwt-expiration-milliseconds: ${JWT_EXPIRATION:86400000}

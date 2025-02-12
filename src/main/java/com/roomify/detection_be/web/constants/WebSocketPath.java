@@ -6,15 +6,17 @@ public interface WebSocketPath {
   String TOPIC = "/topic";
   String ERRORS = "/errors";
 
-  String ROOMS = "/rooms";
+  String ROOM = "/room";
 
   String PATH = "/move";
   String JOIN = "/join";
-
+  String LEAVE = "/leave";
   String CHAT = "/chat";
 
 
   String TOPIC_POSITION = TOPIC + "/positions";
   String TOPIC_CHAT = TOPIC + CHAT;
+  String TOPIC_JOIN = TOPIC + JOIN;
+  String TOPIC_LEAVE = TOPIC+LEAVE;
   String TOPIC_ERRORS = TOPIC + ERRORS;
 }

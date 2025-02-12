@@ -8,8 +8,10 @@ import com.roomify.detection_be.web.dtos.jwt.CustomUserDetailsDTO;
 import com.roomify.detection_be.web.dtos.jwt.TokenDTO;
 import com.roomify.detection_be.web.dtos.req.UserCreateDtoReq;
 import com.roomify.detection_be.web.dtos.req.UserCredentialReq;
+import com.roomify.detection_be.web.dtos.req.UserGenerateReq;
 import com.roomify.detection_be.web.dtos.res.AuthDtoRes;
 import com.roomify.detection_be.web.dtos.res.UserDtoRes;
+import com.roomify.detection_be.web.dtos.res.UserWSRes;
 import com.roomify.detection_be.web.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
@@ -36,10 +38,11 @@ public class UserService {
     }
 
     public UserDtoRes CreateUser(UserCreateDtoReq userCreateDtoReq) {
-        User emailExist = userRepository.findByEmail(userCreateDtoReq.getEmail())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatusCode.valueOf(404), "Email already exist"));
-        User usernameExist = userRepository.findByUsername(userCreateDtoReq.getUsername())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatusCode.valueOf(404), "Username already exist"));
+        boolean emailExist = userRepository.existsByEmail(userCreateDtoReq.getEmail());
+        boolean usernameExist = userRepository.existsByUsername(userCreateDtoReq.getUsername());
+        if (emailExist || usernameExist) {
+            throw new ResponseStatusException(HttpStatusCode.valueOf(400), "Email or username already exist");
+        }
 
         userCreateDtoReq.setPassword(BCrypt.withDefaults().hashToString(12, userCreateDtoReq.getPassword().toCharArray()));
         User user = new User();
@@ -63,5 +66,9 @@ public class UserService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtTokenProvider.generateToken((CustomUserDetailsDTO) authentication.getPrincipal());
         return AuthDtoRes.toDto(new TokenDTO(token), new UserDtoRes(user.getUserId(), user.getUsername(), user.getEmail(), user.getCreatedAt()));
+    }
+
+    public UserWSRes GenerateCharacter(UserGenerateReq user) {
+        return new UserWSRes(user.getUserId(), user.getUsername(), user.getCharacter(), 400, 400);
     }
 }
