@@ -3,7 +3,7 @@ package com.roomify.detection_be.web.controller.auth;
 import com.roomify.detection_be.config.JwtConfig;
 import com.roomify.detection_be.dto.BaseResponseDTO;
 import com.roomify.detection_be.dto.UserDTO;
-import com.roomify.detection_be.service.UserService;
+import com.roomify.detection_be.service.UserServiceOauth;
 import com.roomify.detection_be.service.jwt.JwtService;
 import com.roomify.detection_be.web.entity.Users.User;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,7 +21,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/v1")
 public class AuthController {
-  private final UserService userService;
+  private final UserServiceOauth userServiceOauth;
   private final JwtConfig jwtConfig;
   private final JwtService jwtService;
 
@@ -32,18 +32,18 @@ public class AuthController {
 
   @PostMapping("/register-account")
   public ResponseEntity<BaseResponseDTO> registerAccount(@RequestBody UserDTO userDTO) {
-    return ResponseEntity.ok(userService.registerAccount(userDTO));
+    return ResponseEntity.ok(userServiceOauth.registerAccount(userDTO));
   }
 
   @GetMapping("/info")
   public ResponseEntity<?> getUserInfo() {
-    Optional<User> user = userService.findCurrentUser();
+    Optional<User> user = userServiceOauth.findCurrentUser();
     return ResponseEntity.ok(user);
   }
 
   @PutMapping("/update-password")
   public ResponseEntity<?> updatePassword(@RequestBody UserDTO userDTO) {
-    userService.updateAccount(userDTO);
+    userServiceOauth.updateAccount(userDTO);
     return ResponseEntity.ok("Reset password successfully");
   }
 

@@ -1,9 +1,7 @@
 package com.roomify.detection_be.web.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
@@ -11,6 +9,8 @@ import org.hibernate.annotations.GenericGenerator;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class RoomType {
     @Id
     @GeneratedValue(generator = "snowflake-id")

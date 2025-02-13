@@ -6,12 +6,16 @@ import jakarta.persistence.*;
 import java.time.Instant;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "room_access_history")
 @NoArgsConstructor
+@Getter
+@Setter
 @AllArgsConstructor
 public class RoomAccessHistory {
     @Id

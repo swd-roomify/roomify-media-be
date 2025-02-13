@@ -3,7 +3,9 @@ package com.roomify.detection_be.web.entity;
 import com.roomify.detection_be.web.entity.Users.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.time.Instant;
@@ -11,6 +13,8 @@ import java.time.Instant;
 @Entity
 @Table(name = "room_participants")
 @NoArgsConstructor
+@Getter
+@Setter
 @AllArgsConstructor
 public class RoomParticipant {
     @Id
