@@ -1,4 +1,4 @@
-package com.roomify.detection_be.service;
+package com.roomify.detection_be.service.basicOauth;
 
 import com.roomify.detection_be.Repository.RoleRepository;
 import com.roomify.detection_be.Repository.UserRepository;
@@ -25,7 +25,7 @@ import org.springframework.util.ObjectUtils;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class UserServiceOauthImpl implements UserServiceOauth {
 
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;

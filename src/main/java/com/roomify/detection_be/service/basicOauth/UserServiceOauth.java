@@ -1,4 +1,4 @@
-package com.roomify.detection_be.service;
+package com.roomify.detection_be.service.basicOauth;
 
 import com.roomify.detection_be.dto.BaseResponseDTO;
 import com.roomify.detection_be.dto.UserDTO;

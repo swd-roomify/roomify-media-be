@@ -5,7 +5,7 @@ import com.roomify.detection_be.config.JwtConfig;
 import com.roomify.detection_be.dto.BaseResponseDTO;
 import com.roomify.detection_be.dto.HelperUtils;
 import com.roomify.detection_be.dto.UserRequest;
-import com.roomify.detection_be.service.UserDetailsCustom;
+import com.roomify.detection_be.service.basicOauth.UserDetailsCustom;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

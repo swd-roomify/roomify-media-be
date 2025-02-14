@@ -3,7 +3,6 @@ package com.roomify.detection_be.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.roomify.detection_be.constants.SecurityConstants;
 import com.roomify.detection_be.exception.CustomAccessDeniedHandler;
-import com.roomify.detection_be.service.UserDetailsServiceCustom;
 import com.roomify.detection_be.service.jwt.*;
 import com.roomify.detection_be.service.oauth2.handler.CustomOAuth2FailureHandler;
 import com.roomify.detection_be.service.oauth2.handler.CustomOAuth2SuccessHandler;
@@ -17,8 +16,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -38,7 +35,7 @@ public class SecurityConfig {
 
     @Bean
     public CustomOAuth2SuccessHandler customOAuth2SuccessHandler() {
-        return new CustomOAuth2SuccessHandler(authorizedClientService, jwtTokenSyncService,objectMapper);
+        return new CustomOAuth2SuccessHandler(authorizedClientService, jwtTokenSyncService);
     }
 
     @Bean

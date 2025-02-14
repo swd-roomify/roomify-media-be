@@ -34,10 +34,6 @@ public class RoomAccessHistory {
     @Column(nullable = false)
     private String action;
 
-    @ManyToOne
-    @JoinColumn(name = "performed_by")
-    private User performedBy;
-
     @Column(nullable = false, updatable = false)
     private Instant accessAt;
 

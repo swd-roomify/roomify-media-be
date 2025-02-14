@@ -3,7 +3,7 @@ package com.roomify.detection_be.web.controller.auth;
 import com.roomify.detection_be.config.JwtConfig;
 import com.roomify.detection_be.dto.BaseResponseDTO;
 import com.roomify.detection_be.dto.UserDTO;
-import com.roomify.detection_be.service.UserServiceOauth;
+import com.roomify.detection_be.service.basicOauth.UserServiceOauth;
 import com.roomify.detection_be.service.jwt.JwtService;
 import com.roomify.detection_be.web.entity.Users.User;
 import jakarta.servlet.http.HttpServletRequest;

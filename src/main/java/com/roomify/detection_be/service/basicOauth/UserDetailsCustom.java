@@ -1,4 +1,4 @@
-package com.roomify.detection_be.service;
+package com.roomify.detection_be.service.basicOauth;
 
 import java.util.Collection;
 import java.util.List;

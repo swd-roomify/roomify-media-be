@@ -2,7 +2,7 @@ package com.roomify.detection_be.service.jwt;
 
 import com.roomify.detection_be.config.JwtConfig;
 import com.roomify.detection_be.exception.BaseException;
-import com.roomify.detection_be.service.UserDetailsCustom;
+import com.roomify.detection_be.service.basicOauth.UserDetailsCustom;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

@@ -1,17 +1,12 @@
-package com.roomify.detection_be.service;
+package com.roomify.detection_be.service.basicOauth;
 
 import com.roomify.detection_be.Repository.UserRepository;
 import com.roomify.detection_be.exception.ApplicationErrorCode;
 import com.roomify.detection_be.exception.ApplicationException;
-import com.roomify.detection_be.exception.BaseException;
-import com.roomify.detection_be.web.entity.Users.User;
 
 import java.util.List;
-import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
-    @Autowired
     private final UserService userService;
     private static final Logger log = LoggerFactory.getLogger(ConnectionWebSocket.class);
 
@@ -29,7 +28,6 @@ public class UserController {
         return userService.generateFriendShip(userIdUser2);
 
     }
-
     @DeleteMapping("/unfriend")
     public ResponseEntity<String> unfriend(@RequestParam String userIdUser2) {
         return userService.removeFriendShip(userIdUser2);
