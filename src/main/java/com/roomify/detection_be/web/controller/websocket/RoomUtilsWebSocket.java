@@ -19,13 +19,13 @@ public class RoomUtilsWebSocket {
     private static final Logger log = LoggerFactory.getLogger(RoomUtilsWebSocket.class);
 
     @MessageMapping("/move/{roomId}")
-    public void move(@DestinationVariable String roomId, UserMoveReq user) {
-        roomSessionService.handleUserMove(roomId, user);
+    public void move(@DestinationVariable String roomId, UserMoveReq user, @Header("simpSessionId") String sessionId) {
+        roomSessionService.handleUserMove(roomId, user, sessionId);
     }
 
     @MessageMapping("/chat/{roomId}")
-    public void chat(@DestinationVariable String roomId, UserChatReq user) {
+    public void chat(@DestinationVariable String roomId, UserChatReq user, @Header("simpSessionId") String sessionId) {
         log.info("Chat in room: {}", roomId);
-        roomSessionService.handleUserChat(roomId, user);
+        roomSessionService.handleUserChat(roomId, user, sessionId);
     }
 }
