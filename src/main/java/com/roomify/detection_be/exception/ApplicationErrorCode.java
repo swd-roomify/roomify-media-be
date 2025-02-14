@@ -22,6 +22,8 @@ public enum ApplicationErrorCode implements ErrorCode {
     // Error Code 404
     USER_NOT_FOUND("E_100_404_001", 404),
 
+    ROOM_NOT_FOUND("E_100_404_001", 404),
+
     // Error Code 413
     MAXIMUM_PAY_LOAD("E_100_413_001", 413),
 

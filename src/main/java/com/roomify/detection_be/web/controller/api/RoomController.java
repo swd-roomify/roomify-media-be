@@ -53,8 +53,8 @@ public class RoomController {
     }
 
     @DeleteMapping("/leave/{roomId}/{userId}")
-    public ResponseEntity<String> leaveRoom(@PathVariable String roomId, @PathVariable String userId) {
-        roomService.leaveRoom(roomId, userId);
+    public ResponseEntity<String> leaveRoom(@PathVariable String roomId) {
+        roomService.leaveRoom(roomId);
         return ResponseEntity.ok("User has left the room");
     }
 
@@ -65,8 +65,8 @@ public class RoomController {
     }
 
     @GetMapping("/history/{roomId}")
-    public ResponseEntity<RoomAccessHistory> getRoomHistory(@PathVariable String roomId) {
-        RoomAccessHistory history = roomService.logRoomAccess(roomId);
+    public ResponseEntity<List<RoomAccessHistory>> getRoomHistory(@PathVariable String roomId) {
+        List<RoomAccessHistory> history = roomService.logRoomAccess(roomId);
         return ResponseEntity.ok(history);
     }
 }

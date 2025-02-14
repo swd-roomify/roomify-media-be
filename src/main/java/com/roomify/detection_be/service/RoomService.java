@@ -2,6 +2,8 @@ package com.roomify.detection_be.service;
 
 import com.roomify.detection_be.Repository.*;
 import com.roomify.detection_be.dto.RoomImplementDTO;
+import com.roomify.detection_be.exception.ApplicationErrorCode;
+import com.roomify.detection_be.exception.ApplicationException;
 import com.roomify.detection_be.service.basicOauth.UserServiceOauth;
 import com.roomify.detection_be.service.basicOauth.UserServiceOauthImpl;
 import com.roomify.detection_be.web.entity.Room;
@@ -28,6 +30,7 @@ public class RoomService {
     private final RoomTypeRepository roomTypeRepository;
     private final RoomAccessHistoryRepository accessHistoryRepository;
     private final UserServiceOauth userServiceOauth;
+    private final RoomAccessHistoryRepository roomAccessHistoryRepository;
 
     public String requestJoinRoom(String roomId, String userId) {
         Optional<Room> room = roomRepository.findById(roomId);
@@ -84,8 +87,24 @@ public class RoomService {
                 roomRepository.findAll();
     }
 
-    public void leaveRoom(String roomId, String userId) {
-        participantRepository.deleteByRoomIdAndUserUserId(roomId, userId);
+    public void leaveRoom(String roomId) {
+        Optional<User> optionalUser = userServiceOauth.findCurrentUser();
+        Optional<Room> optionalRoom = roomRepository.findById(roomId);
+
+        if (optionalUser.isEmpty() || optionalRoom.isEmpty()) {
+            throw new ApplicationException(ApplicationErrorCode.ROOM_NOT_FOUND,"Not found room");
+        }
+
+        User user = optionalUser.get();
+        Room room = optionalRoom.get();
+
+        participantRepository.deleteByRoomIdAndUserUserId(roomId, user.getUserId());
+
+        RoomAccessHistory history = new RoomAccessHistory();
+        history.setRoom(room);
+        history.setAction("LEAVE");
+        history.setUser(user);
+        accessHistoryRepository.save(history);
     }
 
     public List<RoomParticipant> getParticipants(String roomId) {
@@ -93,13 +112,8 @@ public class RoomService {
     }
 
 
-    public RoomAccessHistory logRoomAccess(String roomId) {
-        RoomAccessHistory history = new RoomAccessHistory();
-        Optional<User> user = userServiceOauth.findCurrentUser();
-        history.setUser(user.get());
-        history.setRoom(roomRepository.findById(roomId).get());
-        accessHistoryRepository.save(history);
-        return history;
+    public List<RoomAccessHistory> logRoomAccess(String roomId) {
+        return roomAccessHistoryRepository.findByRoomId(roomId);
     }
 }
 
