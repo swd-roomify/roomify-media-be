@@ -5,7 +5,7 @@ import com.roomify.detection_be.exception.ApplicationException;
 import com.roomify.detection_be.exception.NotFoundException;
 import com.roomify.detection_be.exception.ValidationException;
 import com.roomify.detection_be.utility.web.model.res.ErrorCode;
-import com.roomify.detection_be.web.constants.WebSocketPath;
+import com.roomify.detection_be.constants.WebSocketPath;
 
 import java.util.Locale;
 
