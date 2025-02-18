@@ -2,7 +2,7 @@ package com.roomify.detection_be.service.oauth2;
 
 import com.roomify.detection_be.exception.ApplicationErrorCode;
 import com.roomify.detection_be.exception.ApplicationException;
-import com.roomify.detection_be.web.entity.Provider;
+import com.roomify.detection_be.web.entities.Provider;
 
 import java.util.Map;
 

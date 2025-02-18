@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Data
@@ -15,5 +16,5 @@ public class UserDtoRes {
     private String userId;
     private String username;
     private String email;
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 }

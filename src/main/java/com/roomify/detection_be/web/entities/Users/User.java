@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Table(name = "`USER`")
@@ -56,5 +57,5 @@ public class User {
   private String avatarUrl;
 
   @Column(name = "created_at", updatable = false)
-  private LocalDateTime createdAt = LocalDateTime.now();
+  private Instant createdAt = Instant.now();
 }

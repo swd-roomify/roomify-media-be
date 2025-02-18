@@ -2,23 +2,23 @@ spring:
   main:
     allow-circular-references: true
   application:
-    name: ${APPLICATION_NAME}
+    name: ${APPLICATION_NAME:media-backend-server}
   data:
     redis:
       port: ${REDIS_PORT:6379}
       host: ${REDIS_HOST:115.73.218.193}
       database: 0
   datasource:
-      url: ${DB_URL}
-      username: ${DB_USERNAME}
-      password: ${DB_PASSWORD}
-      driver-class-name: ${DB_DRIVER}
+      url: ${DB_URL:jdbc:postgresql://localhost:5432/roomify_media_db}
+      username: ${DB_USERNAME:admin}
+      password: ${DB_PASSWORD:huytuanphuc@!}
+      driver-class-name: ${DB_DRIVER:org.postgresql.Driver}
 
   sql:
     init:
       mode: always
   jpa:
-    database-platform: org.hibernate.dialect.SQLServerDialect
+    database-platform: ${DB_PLATFORM:org.hibernate.dialect.PostgreSQLDialect}
     hibernate:
       ddl-auto: update
   security:
@@ -74,4 +74,4 @@ jwt:
   header: Authorization
   prefix: Bearer
   expiration: 3600
-  secret: ${JWT_SECRET}
+  secret: ${JWT_SECRET:FBu8YFbkcrgG9UUFbBKTTlkO5Md8Nd5Cf7O2V4uqs1I=}

@@ -1,14 +1,14 @@
 package com.roomify.detection_be.service.oauth2.security;
 
-import com.roomify.detection_be.Repository.GithubUserRepository;
-import com.roomify.detection_be.Repository.RoleRepository;
-import com.roomify.detection_be.Repository.UserRepository;
 import com.roomify.detection_be.exception.ApplicationErrorCode;
 import com.roomify.detection_be.exception.ApplicationException;
 import com.roomify.detection_be.exception.BaseException;
+import com.roomify.detection_be.repository.GithubUserRepository;
+import com.roomify.detection_be.repository.RoleRepository;
+import com.roomify.detection_be.repository.UserRepository;
 import com.roomify.detection_be.service.oauth2.OAuth2UserDetails;
 import com.roomify.detection_be.service.oauth2.OAuth2UserDetailsFactory;
-import com.roomify.detection_be.web.entity.Provider;
+import com.roomify.detection_be.web.entities.Provider;
 import com.roomify.detection_be.web.entities.Role;
 import com.roomify.detection_be.web.entities.Users.GithubUser;
 import com.roomify.detection_be.web.entities.Users.User;

@@ -1,8 +1,8 @@
 package com.roomify.detection_be.service.jwt;
 
-import com.roomify.detection_be.Repository.UserRepository;
 import com.roomify.detection_be.exception.ApplicationErrorCode;
 import com.roomify.detection_be.exception.ApplicationException;
+import com.roomify.detection_be.repository.UserRepository;
 import com.roomify.detection_be.service.basicOauth.UserDetailsCustom;
 import com.roomify.detection_be.web.entities.Users.User;
 import java.util.List;
