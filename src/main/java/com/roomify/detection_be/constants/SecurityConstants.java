@@ -20,6 +20,8 @@ public interface SecurityConstants {
     String USER_URL_PREFIX = "/user/**";
 
     String FRONTEND_CALLBACK_URL = "http://localhost:5173/auth/callback";
+    String ERROR_QUERY_PARAM = "?errorMessage=%s";
+    String TOKEN_QUERY_PARAM = "?token=%s";
     String LOGOUT_URL = "/logout";
     String LOGIN_SUCCESS_URL = "/login?logout";
     String ACCESS_DENIED_PAGE = "/403";
