@@ -4,6 +4,7 @@ package com.roomify.detection_be.web.dtos.res;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

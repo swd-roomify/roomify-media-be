@@ -1,5 +1,4 @@
-package com.roomify.detection_be.web.constants;
-
+package com.roomify.detection_be.constants;
 public interface RedisKeyPrefix {
     String USER_KEY_PREFIX = "user:";
     String SESSION_KEY_PREFIX = "session:";
