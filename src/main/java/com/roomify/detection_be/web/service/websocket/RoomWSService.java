@@ -12,13 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-
-import static com.roomify.detection_be.web.constants.RedisKeyPrefix.*;
+import static com.roomify.detection_be.constants.RedisKeyPrefix.*;
 
 @Service
 public class RoomWSService {

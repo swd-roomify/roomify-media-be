@@ -1,6 +1,6 @@
 package com.roomify.detection_be.web.advice;
 
-import com.roomify.detection_be.web.constants.WebSocketPath;
+import com.roomify.detection_be.constants.WebSocketPath;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;

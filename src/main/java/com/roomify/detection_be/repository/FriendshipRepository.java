@@ -1,9 +1,11 @@
 package com.roomify.detection_be.repository;
 
 import com.roomify.detection_be.web.entities.Friendship;
+import com.roomify.detection_be.web.entities.Users.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public interface FriendshipRepository extends JpaRepository<Friendship, String> {
+import java.util.Optional;
+
+public interface FriendShipRepository extends JpaRepository<Friendship,String> {
+    Optional<Friendship> findByUser1AndUser2(Optional<User> user1, Optional<User> byId);
 }

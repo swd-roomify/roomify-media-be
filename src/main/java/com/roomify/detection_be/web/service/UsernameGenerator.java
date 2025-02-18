@@ -1,9 +1,9 @@
 package com.roomify.detection_be.web.service;
 
-import com.roomify.detection_be.Repository.UserRepository;
 
 import java.util.Random;
 
+import com.roomify.detection_be.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

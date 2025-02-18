@@ -1,4 +1,4 @@
-package com.roomify.detection_be.web.entity;
+package com.roomify.detection_be.web.entities;
 
 import jakarta.persistence.*;
 import lombok.*;

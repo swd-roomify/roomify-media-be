@@ -9,12 +9,11 @@ import com.roomify.detection_be.exception.BaseException;
 import com.roomify.detection_be.service.oauth2.OAuth2UserDetails;
 import com.roomify.detection_be.service.oauth2.OAuth2UserDetailsFactory;
 import com.roomify.detection_be.web.entity.Provider;
-import com.roomify.detection_be.web.entity.Role;
-import com.roomify.detection_be.web.entity.Users.GithubUser;
-import com.roomify.detection_be.web.entity.Users.User;
+import com.roomify.detection_be.web.entities.Role;
+import com.roomify.detection_be.web.entities.Users.GithubUser;
+import com.roomify.detection_be.web.entities.Users.User;
 import com.roomify.detection_be.web.service.UsernameGenerator;
 
-import java.util.Objects;
 import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;

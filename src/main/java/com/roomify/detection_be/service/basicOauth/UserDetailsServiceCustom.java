@@ -1,11 +1,11 @@
 package com.roomify.detection_be.service.basicOauth;
 
-import com.roomify.detection_be.Repository.UserRepository;
 import com.roomify.detection_be.exception.ApplicationErrorCode;
 import com.roomify.detection_be.exception.ApplicationException;
 
 import java.util.List;
 
+import com.roomify.detection_be.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,6 +1,6 @@
 package com.roomify.detection_be.web.dtos.jwt;
 
-import com.roomify.detection_be.web.entities.User;
+import com.roomify.detection_be.web.entities.UserOLD;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +15,7 @@ import java.util.Collections;
 @NoArgsConstructor
 @Data
 public class CustomUserDetailsDTO implements UserDetails {
-    private User user;
+    private UserOLD user;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singleton(new SimpleGrantedAuthority("User"));

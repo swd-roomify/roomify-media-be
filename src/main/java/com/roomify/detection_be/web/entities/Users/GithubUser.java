@@ -1,4 +1,4 @@
-package com.roomify.detection_be.web.entity.Users;
+package com.roomify.detection_be.web.entities.Users;
 
 import jakarta.persistence.*;
 import lombok.*;

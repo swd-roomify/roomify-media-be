@@ -1,6 +1,6 @@
-package com.roomify.detection_be.Repository;
+package com.roomify.detection_be.repository;
 
-import com.roomify.detection_be.web.entity.Users.GithubUser;
+import com.roomify.detection_be.web.entities.Users.GithubUser;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

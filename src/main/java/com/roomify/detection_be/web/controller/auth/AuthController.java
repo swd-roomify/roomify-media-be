@@ -5,7 +5,7 @@ import com.roomify.detection_be.dto.BaseResponseDTO;
 import com.roomify.detection_be.dto.UserDTO;
 import com.roomify.detection_be.service.basicOauth.UserServiceOauth;
 import com.roomify.detection_be.service.jwt.JwtService;
-import com.roomify.detection_be.web.entity.Users.User;
+import com.roomify.detection_be.web.entities.Users.User;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

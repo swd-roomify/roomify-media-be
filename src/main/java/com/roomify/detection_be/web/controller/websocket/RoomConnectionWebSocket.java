@@ -1,21 +1,17 @@
 package com.roomify.detection_be.web.controller.websocket;
 
-import com.roomify.detection_be.web.constants.WebSocketPath;
+import com.roomify.detection_be.constants.WebSocketPath;
 import com.roomify.detection_be.web.dtos.req.UserJoinReq;
 import com.roomify.detection_be.web.service.websocket.RoomWSService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 import java.util.Objects;

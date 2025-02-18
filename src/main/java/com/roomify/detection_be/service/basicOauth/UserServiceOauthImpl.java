@@ -8,8 +8,8 @@ import com.roomify.detection_be.exception.ApplicationErrorCode;
 import com.roomify.detection_be.exception.ApplicationException;
 import com.roomify.detection_be.exception.BaseException;
 import com.roomify.detection_be.web.entity.Provider;
-import com.roomify.detection_be.web.entity.Role;
-import com.roomify.detection_be.web.entity.Users.User;
+import com.roomify.detection_be.web.entities.Role;
+import com.roomify.detection_be.web.entities.Users.User;
 
 import java.util.List;
 import java.util.Optional;

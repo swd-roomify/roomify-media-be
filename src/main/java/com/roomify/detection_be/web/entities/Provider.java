@@ -1,4 +1,4 @@
-package com.roomify.detection_be.web.dtos;
+package com.roomify.detection_be.web.entities;
 
 public enum Provider {
     local,

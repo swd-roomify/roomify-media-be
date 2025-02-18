@@ -1,4 +1,4 @@
-package com.roomify.detection_be.web.constants;
+package com.roomify.detection_be.constants;
 
 public interface WebSocketPath {
     String WEBSOCKET_ENDPOINT = "/ws";

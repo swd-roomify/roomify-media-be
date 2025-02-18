@@ -1,7 +1,9 @@
 package com.roomify.detection_be.web.service.database;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
+import com.roomify.detection_be.repository.FriendShipRepository;
 import com.roomify.detection_be.repository.UserRepository;
+import com.roomify.detection_be.service.basicOauth.UserServiceOauth;
 import com.roomify.detection_be.utility.SnowflakeGenerator;
 import com.roomify.detection_be.utility.jwt.JwtTokenProvider;
 import com.roomify.detection_be.web.dtos.jwt.CustomUserDetailsDTO;
@@ -12,9 +14,11 @@ import com.roomify.detection_be.web.dtos.req.UserGenerateReq;
 import com.roomify.detection_be.web.dtos.res.AuthDtoRes;
 import com.roomify.detection_be.web.dtos.res.UserDtoRes;
 import com.roomify.detection_be.web.dtos.res.UserWSRes;
-import com.roomify.detection_be.web.entities.User;
+import com.roomify.detection_be.web.entities.Friendship;
+import com.roomify.detection_be.web.entities.Users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,14 +26,19 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Optional;
+
 @Service
 public class UserService {
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
+    @Autowired
+    private UserServiceOauth userServiceOauth;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private FriendShipRepository friendShipRepository;
 
     SnowflakeGenerator snowflake = new SnowflakeGenerator(1);
 
@@ -70,5 +79,28 @@ public class UserService {
 
     public UserWSRes GenerateCharacter(UserGenerateReq user) {
         return new UserWSRes(user.getUserId(), user.getUsername(), user.getCharacter(), 400, 400);
+    }
+
+    public ResponseEntity<String> generateFriendShip(String userIdUser2) {
+        Friendship friendship = new Friendship();
+        Optional<User> user = userServiceOauth.findCurrentUser();
+        if (user.isPresent()) {
+            friendship.setUser1(userRepository.findById(user.get().getUserId()).orElseThrow());
+            friendship.setUser2(userRepository.findById(userIdUser2).orElseThrow());
+            friendship.setStatus("PENDING");
+            friendShipRepository.save(friendship);
+        }
+        return ResponseEntity.ok("Friend request sent.");
+
+    }
+
+    public ResponseEntity<String> removeFriendShip(String userIdUser2) {
+        Optional<User> user1 = userServiceOauth.findCurrentUser();
+        if (user1.isPresent()) {
+            Friendship friendship = friendShipRepository.findByUser1AndUser2(user1, userRepository.findById(userIdUser2))
+                    .orElseThrow(() -> new RuntimeException("Friendship not found"));
+            friendShipRepository.delete(friendship);
+        }
+        return ResponseEntity.ok("Unfriended successfully.");
     }
 }

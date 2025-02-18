@@ -1,10 +1,11 @@
-package com.roomify.detection_be.web.entity.Users;
+package com.roomify.detection_be.web.entities.Users;
 
-import com.roomify.detection_be.web.entities.Character;
 import com.roomify.detection_be.web.entities.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+
+import java.time.LocalDateTime;
 
 @Table(name = "`USER`")
 @Entity
@@ -48,15 +49,12 @@ public class User {
   @Column(name = "provided_id")
   private String providedId;
 
-  @Transient private int positionX;
-  @Transient private int positionY;
-
   @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private GithubUser githubUser;
 
+  @Column(name = "avatar_url")
   private String avatarUrl;
 
-  @ManyToOne
-  @JoinColumn(name = "character_id")
-  private Character character;
+  @Column(name = "created_at", updatable = false)
+  private LocalDateTime createdAt = LocalDateTime.now();
 }

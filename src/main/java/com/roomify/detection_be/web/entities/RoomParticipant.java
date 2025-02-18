@@ -1,6 +1,6 @@
-package com.roomify.detection_be.web.entity;
+package com.roomify.detection_be.web.entities;
 
-import com.roomify.detection_be.web.entity.Users.User;
+import com.roomify.detection_be.web.entities.Users.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
