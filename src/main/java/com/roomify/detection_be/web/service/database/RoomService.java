@@ -75,7 +75,7 @@ public class RoomService {
 
     public String requestJoinRoom(String roomId, String userId) {
         Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatusCode.valueOf(404), ("Room not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatusCode.valueOf(404), ("Room not found")));
         return "Request sent to host for approval";
     }
 
@@ -87,7 +87,7 @@ public class RoomService {
             throw new ResponseStatusException(HttpStatusCode.valueOf(403), ("Only host can accept join requests"));
         }
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatusCode.valueOf(404), ("User not found")););
+                .orElseThrow(() -> new ResponseStatusException(HttpStatusCode.valueOf(404), ("User not found")));
         RoomParticipant participant = new RoomParticipant();
         participant.setRoom(room);
         participant.setUser(user);
