@@ -38,21 +38,6 @@ public class RoomController {
     public ResponseEntity<List<RoomDtoRes>> GetRoomByUserId(@PathVariable String userId) {
         return ResponseEntity.ok(roomService.GetRoomsByUserId(userId));
     }
-
-//    @PostMapping("/request-join")
-//    public ResponseEntity<String> requestJoinRoom(@RequestBody JoinRoomRequest request) {
-//        String response = roomService.requestJoinRoom(request.getRoomId(), request.getUserId());
-//        return ResponseEntity.ok(response);
-//    }
-//
-//    @PostMapping("/accept-join")
-//    public ResponseEntity<String> acceptJoinRequest(
-//            @RequestParam String roomId,
-//            @RequestParam String userId,
-//            @RequestParam String hostId) {
-//        String response = roomService.acceptJoinRequest(roomId, userId, hostId);
-//        return ResponseEntity.ok(response);
-//    }
     @DeleteMapping("/delete/{roomId}")
     public ResponseEntity<String> deleteRoom(@PathVariable String roomId) {
         roomService.deleteRoom(roomId);
@@ -65,11 +50,6 @@ public class RoomController {
         return ResponseEntity.ok(rooms);
     }
 
-//    @DeleteMapping("/leave/{roomId}/{userId}")
-//    public ResponseEntity<String> leaveRoom(@PathVariable String roomId) {
-//        roomService.leaveRoom(roomId);
-//        return ResponseEntity.ok("User has left the room");
-//    }
 
     @GetMapping("/participants/{roomId}")
     public ResponseEntity<List<RoomParticipant>> getParticipants(@PathVariable String roomId) {

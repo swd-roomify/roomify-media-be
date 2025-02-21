@@ -50,29 +50,6 @@ public class SecurityConfig {
         return new JwtAuthenticationFilter();
     }
 
-//    @Bean
-//    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-//        return authenticationConfiguration.getAuthenticationManager();
-//    }
-
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
-
-//    @Bean
-//    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        http.csrf(AbstractHttpConfigurer::disable)
-//                .cors(AbstractHttpConfigurer::disable)
-//                .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests.
-//                        requestMatchers("/api/auth/**").permitAll().
-//                        requestMatchers(AUTH_WHITE_LIST).permitAll().
-//                        anyRequest().permitAll())
-//                .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(jwtAuthenticationEntryPoint)) // if any exception came
-//                .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // nothing to save on server
-//        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-//        return http.build();
-//    }
 
     private static final String[] AUTH_WHITE_LIST = {
             "/v3/api-docs/**",

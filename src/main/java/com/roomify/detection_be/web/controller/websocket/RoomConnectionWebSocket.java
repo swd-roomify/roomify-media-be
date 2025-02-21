@@ -2,6 +2,7 @@ package com.roomify.detection_be.web.controller.websocket;
 
 import com.roomify.detection_be.constants.WebSocketPath;
 import com.roomify.detection_be.web.dtos.req.UserJoinReq;
+import com.roomify.detection_be.web.service.database.RoomService;
 import com.roomify.detection_be.web.service.websocket.RoomWSService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,8 @@ import java.util.Objects;
 public class RoomConnectionWebSocket {
     @Autowired
     private RoomWSService roomSessionService;
+    @Autowired
+    private RoomService roomService;
     private static final Logger log = LoggerFactory.getLogger(RoomConnectionWebSocket.class);
 //    @EventListener
 //    public void handleWebSocketConnectListener(SessionConnectEvent event) {

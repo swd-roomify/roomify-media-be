@@ -19,7 +19,7 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/auth")
 public class AuthController {
   private final UserServiceOauth userServiceOauth;
   private final JwtConfig jwtConfig;

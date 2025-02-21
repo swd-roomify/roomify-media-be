@@ -42,8 +42,5 @@ public class RoomParticipant {
     protected void onCreate() {
         this.joinTime = Instant.now();
     }
-    private Float lastPositionX;
-
-    private Float lastPositionY;
 
 }

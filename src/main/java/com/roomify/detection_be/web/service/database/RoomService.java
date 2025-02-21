@@ -79,29 +79,29 @@ public class RoomService {
         return "Request sent to host for approval";
     }
 
-    public String acceptJoinRequest(String roomId, String userId, String hostId) {
-        Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatusCode.valueOf(404), ("Room not found")));
-
-        if (!room.getHost().getUserId().equals(hostId)) {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(403), ("Only host can accept join requests"));
-        }
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatusCode.valueOf(404), ("User not found")));
-        RoomParticipant participant = new RoomParticipant();
-        participant.setRoom(room);
-        participant.setUser(user);
-        participant.setJoinTime(Instant.from(LocalDateTime.now()));
-        participantRepository.save(participant);
-        return "User has been added to the room";
-    }
+//    public String acceptJoinRequest(String roomId, String userId, String hostId) {
+//        Room room = roomRepository.findById(roomId)
+//                .orElseThrow(() -> new ResponseStatusException(HttpStatusCode.valueOf(404), ("Room not found")));
+//
+//        if (!room.getHost().getUserId().equals(hostId)) {
+//            throw new ResponseStatusException(HttpStatusCode.valueOf(403), ("Only host can accept join requests"));
+//        }
+//        User user = userRepository.findById(userId)
+//                .orElseThrow(() -> new ResponseStatusException(HttpStatusCode.valueOf(404), ("User not found")));
+//        RoomParticipant participant = new RoomParticipant();
+//        participant.setRoom(room);
+//        participant.setUser(user);
+//        participant.setJoinTime(Instant.from(LocalDateTime.now()));
+//        participantRepository.save(participant);
+//        return "User has been added to the room";
+//    }
 
     public String createRoom(RoomImplementDTO request) {
         User host = userRepository.findById(request.getHostId())
-                .orElseThrow(() -> new RuntimeException("Host not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatusCode.valueOf(404),"Host not found"));
 
         RoomType roomType = roomTypeRepository.findById(request.getRoomTypeId())
-                .orElseThrow(() -> new RuntimeException("Room type not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatusCode.valueOf(404),"Room type not found"));
 
         Room room = new Room();
         room.setRoomCode(request.getRoomId());
@@ -123,32 +123,45 @@ public class RoomService {
                 roomRepository.findAll();
     }
 
-    public void leaveRoom(String roomId) {
-        Optional<User> optionalUser = userServiceOauth.findCurrentUser();
-        Optional<Room> optionalRoom = roomRepository.findById(roomId);
-
-        if (optionalUser.isEmpty() || optionalRoom.isEmpty()) {
-            throw new ApplicationException(ApplicationErrorCode.ROOM_NOT_FOUND, "Not found room");
-        }
-
-        User user = optionalUser.get();
-        Room room = optionalRoom.get();
-
-        participantRepository.deleteByRoomIdAndUserUserId(roomId, user.getUserId());
-
-        RoomAccessHistory history = new RoomAccessHistory();
-        history.setRoom(room);
-        history.setAction("LEAVE");
-        history.setUser(user);
-        accessHistoryRepository.save(history);
-    }
+//    public void leaveRoom(String roomId) {
+//        Optional<User> optionalUser = userServiceOauth.findCurrentUser();
+//        Optional<Room> optionalRoom = roomRepository.findById(roomId);
+//
+//        if (optionalUser.isEmpty() || optionalRoom.isEmpty()) {
+//            throw new ApplicationException(ApplicationErrorCode.ROOM_NOT_FOUND, "Not found room");
+//        }
+//
+//        User user = optionalUser.get();
+//        Room room = optionalRoom.get();
+//
+//        participantRepository.deleteByRoomIdAndUserUserId(roomId, user.getUserId());
+//
+//        RoomAccessHistory history = new RoomAccessHistory();
+//        history.setRoom(room);
+//        history.setAction("LEAVE");
+//        history.setUser(user);
+//        accessHistoryRepository.save(history);
+//    }
 
     public List<RoomParticipant> getParticipants(String roomId) {
         return participantRepository.findUsersByRoomId(roomId);
     }
 
+    public List<RoomParticipant> AddParticipantToRoom(String roomId,String userId, String hostId){
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatusCode.valueOf(404), ("Room not found")));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatusCode.valueOf(404), ("User not found")));
+        RoomParticipant participant = new RoomParticipant();
+        participant.setRoom(room);
+        participant.setUser(user);
+        participant.setJoinTime(Instant.from(LocalDateTime.now()));
+        participantRepository.save(participant);
+        return participantRepository.findUsersByRoomId(roomId);
+    }
 
-    public List<RoomAccessHistory> logRoomAccess(String roomId) {
-        return roomAccessHistoryRepository.findByRoomId(roomId);
+    public List<RoomParticipant> RemoveParticipantFromRoom(String roomId,String userId) {
+        participantRepository.deleteByRoomIdAndUserUserId(roomId, userId);
+        return participantRepository.findUsersByRoomId(roomId);
     }
 }
