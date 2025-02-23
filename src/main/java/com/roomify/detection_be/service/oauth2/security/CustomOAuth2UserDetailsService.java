@@ -3,17 +3,16 @@ package com.roomify.detection_be.service.oauth2.security;
 import com.roomify.detection_be.exception.ApplicationErrorCode;
 import com.roomify.detection_be.exception.ApplicationException;
 import com.roomify.detection_be.exception.BaseException;
-import com.roomify.detection_be.repository.GithubUserRepository;
 import com.roomify.detection_be.repository.RoleRepository;
 import com.roomify.detection_be.repository.UserRepository;
 import com.roomify.detection_be.service.oauth2.OAuth2UserDetails;
 import com.roomify.detection_be.service.oauth2.OAuth2UserDetailsFactory;
 import com.roomify.detection_be.web.entities.Provider;
 import com.roomify.detection_be.web.entities.Role;
-import com.roomify.detection_be.web.entities.Users.GithubUser;
-import com.roomify.detection_be.web.entities.Users.User;
+import com.roomify.detection_be.web.entities.User;
 import com.roomify.detection_be.web.service.UsernameGenerator;
 
+import java.time.Instant;
 import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
@@ -38,8 +37,6 @@ public class CustomOAuth2UserDetailsService extends DefaultOAuth2UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final UsernameGenerator usernameGenerator;
-    private final GithubUserRepository githubUserRepository;
-
 
 
     @Override
@@ -55,91 +52,43 @@ public class CustomOAuth2UserDetailsService extends DefaultOAuth2UserService {
         }
     }
 
-    private OAuth2User checkingOAuth2User(
-            OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User) {
-        OAuth2UserDetails oAuth2UserDetails =
-                OAuth2UserDetailsFactory.createOAuth2UserDetails(
-                        oAuth2User.getAttributes(),
-                        oAuth2UserRequest.getClientRegistration().getRegistrationId());
+    private OAuth2User checkingOAuth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User) {
+        OAuth2UserDetails oAuth2UserDetails = OAuth2UserDetailsFactory.createOAuth2UserDetails(oAuth2User.getAttributes(), oAuth2UserRequest.getClientRegistration().getRegistrationId());
         if (ObjectUtils.isEmpty(oAuth2UserDetails)) {
-            throw new ApplicationException(ApplicationErrorCode.USER_NOT_FOUND,  "Not found user in property");
+            throw new ApplicationException(ApplicationErrorCode.USER_NOT_FOUND, "Not found user in property");
         }
-        String username = "";
-        String githubUsername = "";
+        String username = usernameGenerator.generateUniqueUsername();
         Optional<User> user = Optional.empty();
-        if (oAuth2UserRequest
-                .getClientRegistration()
-                .getRegistrationId()
-                .equals(Provider.github.name())) {
-            githubUsername = (String) oAuth2User.getAttributes().get("login");
-            user = userRepository.findByGithubUserGithubUsername(githubUsername);
-            username = usernameGenerator.generateUniqueUsername();
-        } else if (oAuth2UserRequest
-                .getClientRegistration()
-                .getRegistrationId()
-                .equals(Provider.google.name())) {
-            user =
-                    userRepository.findByEmailAndProvidedId(
-                            oAuth2UserDetails.getEmail(), Provider.google.name());
-            username = usernameGenerator.generateUniqueUsername();
+        if (oAuth2UserRequest.getClientRegistration().getRegistrationId().equals(Provider.github.name())) {
+            user = userRepository.findByEmailAndProvidedId(oAuth2UserDetails.getEmail(), Provider.github.name());
+        } else if (oAuth2UserRequest.getClientRegistration().getRegistrationId().equals(Provider.google.name())) {
+            user = userRepository.findByEmailAndProvidedId(oAuth2UserDetails.getEmail(), Provider.google.name());
         }
         User userDetail;
         if (user.isPresent()) {
             userDetail = user.get();
-            if (!userDetail
-                    .getProvidedId()
-                    .equals(oAuth2UserRequest.getClientRegistration().getRegistrationId())) {
+            if (!userDetail.getProvidedId().equals(oAuth2UserRequest.getClientRegistration().getRegistrationId())) {
                 throw new BaseException("403", "Invalid site login with" + userDetail.getProvidedId());
             }
             userDetail = updateOAuth2UserDetails(userDetail, oAuth2UserDetails);
-        } else
-            userDetail =
-                    registerNewOAuthUserDetails(
-                            oAuth2UserDetails, oAuth2UserRequest, username, githubUsername);
-        return new OAuth02UserDetailsCustom(
-                userDetail.getPassword(),
-                userDetail.getUsername(),
-                userDetail.getUserId(),
-                new SimpleGrantedAuthority(userDetail.getRole().getName()),
-                oAuth2UserRequest.getClientRegistration().getRegistrationId());
+        } else {
+            userDetail = registerNewOAuthUserDetails(oAuth2UserDetails, oAuth2UserRequest, username);
+        }
+        return new OAuth02UserDetailsCustom(userDetail.getPassword(), userDetail.getUsername(), userDetail.getUserId(), new SimpleGrantedAuthority(userDetail.getRole().getName()), oAuth2UserRequest.getClientRegistration().getRegistrationId());
     }
 
-    private User registerNewOAuthUserDetails(
-            OAuth2UserDetails oAuth2UserDetails,
-            OAuth2UserRequest oAuth2UserRequest,
-            String username,
-            String githubUsername) {
-        Role userRole = roleRepository.findByName("USER")
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Role not found"));
+    private User registerNewOAuthUserDetails(OAuth2UserDetails oAuth2UserDetails, OAuth2UserRequest oAuth2UserRequest, String username) {
+        Role userRole = roleRepository.findByName("USER").orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Role not found"));
 
-        User user = User.builder()
-                .username(username)
-                .email(oAuth2UserDetails.getEmail() != null ? oAuth2UserDetails.getEmail() : null)
-                .providedId(oAuth2UserRequest.getClientRegistration().getRegistrationId())
-                .isEnabled(true)
-                .credentialsNonExpired(true)
-                .accountNonExpired(true)
-                .accountNonLocked(true)
-                .role(userRole)
-                .build();
-
-        user = userRepository.save(user);
-
-        if (githubUsername != null && !githubUsername.isEmpty()) {
-            GithubUser githubUser = GithubUser.builder()
-                    .githubUsername(githubUsername)
-                    .user(user)
-                    .build();
-
-            githubUserRepository.save(githubUser);
+        User user = User.builder().username(username).email(oAuth2UserDetails.getEmail() != null ? oAuth2UserDetails.getEmail() : null).providedId(oAuth2UserRequest.getClientRegistration().getRegistrationId()).isEnabled(true).credentialsNonExpired(true).accountNonExpired(true).accountNonLocked(true).role(userRole).createdAt(Instant.now()).build();
+        boolean isExisted = userRepository.existsByEmail(oAuth2UserDetails.getEmail());
+        if (!isExisted) {
+            user = userRepository.save(user);
         }
-
         return user;
     }
 
-
-    private User updateOAuth2UserDetails(
-            User user, OAuth2UserDetails oAuth2UserDetails) {
+    private User updateOAuth2UserDetails(User user, OAuth2UserDetails oAuth2UserDetails) {
         user.setEmail(oAuth2UserDetails.getEmail());
         return userRepository.save(user);
     }

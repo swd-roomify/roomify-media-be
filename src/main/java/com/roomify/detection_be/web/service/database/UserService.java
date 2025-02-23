@@ -15,7 +15,7 @@ import com.roomify.detection_be.web.dtos.res.AuthDtoRes;
 import com.roomify.detection_be.web.dtos.res.UserDtoRes;
 import com.roomify.detection_be.web.dtos.res.UserWSRes;
 import com.roomify.detection_be.web.entities.Friendship;
-import com.roomify.detection_be.web.entities.Users.User;
+import com.roomify.detection_be.web.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;

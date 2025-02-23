@@ -1,6 +1,6 @@
 package com.roomify.detection_be.repository;
 
-import com.roomify.detection_be.web.entities.Users.User;
+import com.roomify.detection_be.web.entities.User;
 
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,11 +13,8 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     Optional<User> findByEmail(String email);
 
-    Optional<User> findByGithubUserGithubUsername(String name);
-
     Optional<User> findByEmailAndProvidedId(String name, String provideId);
 
-    Optional<User> findByProvidedId(String providedId);
     boolean existsByUsername(String newUsername);
     boolean existsByEmail(String email);
 

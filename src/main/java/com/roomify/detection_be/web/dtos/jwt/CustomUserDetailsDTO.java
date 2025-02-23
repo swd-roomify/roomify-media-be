@@ -1,6 +1,6 @@
 package com.roomify.detection_be.web.dtos.jwt;
 
-import com.roomify.detection_be.web.entities.Users.User;
+import com.roomify.detection_be.web.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

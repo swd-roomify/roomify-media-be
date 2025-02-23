@@ -152,6 +152,7 @@ public class JwtServiceImpl implements JwtService {
                         authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .claim("roles", roles)
                 .claim("claims", claims)
+                .claim("username", username)
                 .issuedAt(new Date())
                 .expiration(new Date(expirationTimestamp))
                 .signWith(getKey())

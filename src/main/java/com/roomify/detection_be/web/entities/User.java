@@ -1,4 +1,4 @@
-package com.roomify.detection_be.web.entities.Users;
+package com.roomify.detection_be.web.entities;
 
 import com.roomify.detection_be.web.entities.Role;
 import jakarta.persistence.*;
@@ -49,9 +49,6 @@ public class User {
 
   @Column(name = "provided_id")
   private String providedId;
-
-  @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-  private GithubUser githubUser;
 
   @Column(name = "avatar_url")
   private String avatarUrl;

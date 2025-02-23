@@ -1,6 +1,5 @@
 package com.roomify.detection_be.web.entities;
 
-import com.roomify.detection_be.web.entities.Users.User;
 import jakarta.persistence.*;
 
 import java.time.Instant;

@@ -2,7 +2,7 @@ package com.roomify.detection_be.service.basicOauth;
 
 import com.roomify.detection_be.dto.BaseResponseDTO;
 import com.roomify.detection_be.dto.UserDTO;
-import com.roomify.detection_be.web.entities.Users.User;
+import com.roomify.detection_be.web.entities.User;
 import java.util.Optional;
 
 public interface UserServiceOauth {
@@ -12,4 +12,5 @@ public interface UserServiceOauth {
     void updateAccount(UserDTO userDTO);
 
     Optional<User> findCurrentUser();
+    User getCurrentUser(String username);
 }

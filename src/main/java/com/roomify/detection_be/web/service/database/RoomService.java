@@ -1,8 +1,6 @@
 package com.roomify.detection_be.web.service.database;
 
 import com.roomify.detection_be.dto.RoomImplementDTO;
-import com.roomify.detection_be.exception.ApplicationErrorCode;
-import com.roomify.detection_be.exception.ApplicationException;
 import com.roomify.detection_be.repository.*;
 import com.roomify.detection_be.service.basicOauth.UserServiceOauth;
 import com.roomify.detection_be.utility.SnowflakeGenerator;
@@ -12,7 +10,7 @@ import com.roomify.detection_be.web.entities.Room;
 import com.roomify.detection_be.web.entities.RoomAccessHistory;
 import com.roomify.detection_be.web.entities.RoomParticipant;
 import com.roomify.detection_be.web.entities.RoomType;
-import com.roomify.detection_be.web.entities.Users.User;
+import com.roomify.detection_be.web.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
@@ -21,7 +19,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class RoomService {

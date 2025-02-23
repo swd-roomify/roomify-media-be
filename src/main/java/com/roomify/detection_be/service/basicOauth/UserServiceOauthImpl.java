@@ -9,7 +9,7 @@ import com.roomify.detection_be.repository.RoleRepository;
 import com.roomify.detection_be.repository.UserRepository;
 import com.roomify.detection_be.web.entities.Provider;
 import com.roomify.detection_be.web.entities.Role;
-import com.roomify.detection_be.web.entities.Users.User;
+import com.roomify.detection_be.web.entities.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +22,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -72,6 +73,13 @@ public class UserServiceOauthImpl implements UserServiceOauth {
             username = (String) authentication.getPrincipal();
         }
         return userRepository.findByUsername(username);
+    }
+
+    public User getCurrentUser(String username){
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "User not found"
+                ));
     }
 
     private User updateUser(UserDTO userDTO, String userId) {
