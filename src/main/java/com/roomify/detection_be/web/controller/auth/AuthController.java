@@ -11,9 +11,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -24,11 +27,6 @@ public class AuthController {
   private final UserServiceOauth userServiceOauth;
   private final JwtConfig jwtConfig;
   private final JwtService jwtService;
-
-  @GetMapping("/login/error")
-  public ResponseEntity<String> loginError() {
-    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed");
-  }
 
   @PostMapping("/register-account")
   public ResponseEntity<BaseResponseDTO> registerAccount(@RequestBody UserDTO userDTO) {
@@ -58,4 +56,6 @@ public class AuthController {
 
     return ResponseEntity.badRequest().body("Invalid token");
   }
+
+
 }

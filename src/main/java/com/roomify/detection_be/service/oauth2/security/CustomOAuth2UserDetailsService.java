@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -28,6 +29,8 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
 @RequiredArgsConstructor
 @Service
 public class CustomOAuth2UserDetailsService extends DefaultOAuth2UserService {
@@ -106,7 +109,8 @@ public class CustomOAuth2UserDetailsService extends DefaultOAuth2UserService {
             OAuth2UserRequest oAuth2UserRequest,
             String username,
             String githubUsername) {
-        Optional<Role> userRole = roleRepository.findByName("USER");
+        Role userRole = roleRepository.findByName("USER")
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Role not found"));
 
         User user = User.builder()
                 .username(username)
@@ -116,7 +120,7 @@ public class CustomOAuth2UserDetailsService extends DefaultOAuth2UserService {
                 .credentialsNonExpired(true)
                 .accountNonExpired(true)
                 .accountNonLocked(true)
-                .role(userRole.orElse(null))
+                .role(userRole)
                 .build();
 
         user = userRepository.save(user);

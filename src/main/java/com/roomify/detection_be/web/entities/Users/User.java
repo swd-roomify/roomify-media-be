@@ -8,7 +8,7 @@ import org.hibernate.annotations.GenericGenerator;
 import java.time.Instant;
 import java.time.LocalDateTime;
 
-@Table(name = "`USER`")
+@Table(name = "users")
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor

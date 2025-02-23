@@ -7,7 +7,8 @@ public interface SecurityConstants {
             "/oauth2/authorization/github",
             "/login/oauth2/code/*",
             "/grantcode",
-            "/api/v1/login/non-type"
+            "/api/v1/login/non-type",
+            "/api/auth/**"
     };
 
     String[] WEBSOCKET_URLS = {
@@ -19,7 +20,7 @@ public interface SecurityConstants {
     String ADMIN_URL_PREFIX = "/admin/**";
     String USER_URL_PREFIX = "/user/**";
 
-    String FRONTEND_CALLBACK_URL = "http://localhost:5173/auth/callback";
+    String FRONTEND_CALLBACK_URL = "http://localhost:5173/api/auth/oauth2/success";
     String ERROR_QUERY_PARAM = "?errorMessage=%s";
     String TOKEN_QUERY_PARAM = "?token=%s";
     String LOGOUT_URL = "/logout";

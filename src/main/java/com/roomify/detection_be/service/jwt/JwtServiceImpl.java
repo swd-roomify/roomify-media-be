@@ -6,6 +6,7 @@ import com.roomify.detection_be.service.basicOauth.UserDetailsCustom;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+
 import java.time.Instant;
 import java.util.*;
 import java.util.function.Function;
@@ -16,6 +17,7 @@ import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -152,6 +154,16 @@ public class JwtServiceImpl implements JwtService {
                 .claim("claims", claims)
                 .issuedAt(new Date())
                 .expiration(new Date(expirationTimestamp))
+                .signWith(getKey())
+                .compact();
+    }
+
+    public String generateOAuth2Token(String userId) {
+        Instant now = Instant.now();
+        return Jwts.builder()
+                .subject(userId)
+                .issuedAt(Date.from(now))
+                .expiration(Date.from(now.plusSeconds(jwtConfig.getExpiration())))
                 .signWith(getKey())
                 .compact();
     }

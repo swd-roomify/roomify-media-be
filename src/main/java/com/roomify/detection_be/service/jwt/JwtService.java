@@ -25,5 +25,7 @@ public interface JwtService {
       Map<String, Object> claims,
       long googleTokenExpiration);
 
+  String generateOAuth2Token(String userId);
+
   void revokeToken(String accessToken);
 }
