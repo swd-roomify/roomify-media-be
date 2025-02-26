@@ -28,7 +28,7 @@ spring:
           google:
             client-id: ${GOOGLE_CLIENT_ID:862237343446-g75pjvd3pvnfq6i0pvlblfj1d5o2a4t1.apps.googleusercontent.com}
             client-secret: ${GOOGLE_CLIENT_SECRET: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}
-            redirect-uri: "http://localhost:8081/login/oauth2/code/google"
+            redirect-uri: ${GOOGLE_REDIRECT_URL:http://localhost:8081/login/oauth2/code/google}
             scope:
               - email
               - profile
@@ -36,7 +36,7 @@ spring:
           github:
             client-id: ${GITHUB_CLIENT_ID:Iv23lij89v38aA4qUVfg}
             client-secret: ${GITHUB_CLIENT_SECRET:6b9b87b1da688e120d720629bc26720bc68ba7b1}
-            redirect-uri: "http://localhost:8081/login/oauth2/code/github"
+            redirect-uri: ${GITHUB_REDIRECT_URL:http://localhost:8081/login/oauth2/code/github}
             scope:
               - read:user
               - user:email
@@ -73,5 +73,5 @@ jwt:
   url: /api/v1/login/non-type
   header: Authorization
   prefix: Bearer
-  expiration: 3600
+  expiration: 360000
   secret: ${JWT_SECRET:FBu8YFbkcrgG9UUFbBKTTlkO5Md8Nd5Cf7O2V4uqs1I=}

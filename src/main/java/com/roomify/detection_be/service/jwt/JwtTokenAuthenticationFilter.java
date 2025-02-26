@@ -37,9 +37,10 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
 
     if (!ObjectUtils.isEmpty(accessToken) && accessToken.startsWith(jwtConfig.getPrefix() + " ")) {
       accessToken = accessToken.substring((jwtConfig.getPrefix() + " ").length());
-
+    log.info("passed the prefix test");
       try {
         if (jwtService.isValidToken(accessToken)) {
+          log.info("passed the valid token test");
           Claims claims = jwtService.extractClaims(accessToken);
 
           String username = claims.getSubject();
@@ -55,13 +56,18 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList()));
             SecurityContextHolder.getContext().setAuthentication(auth);
+            log.info("passed the authentication test");
           }
+        }
+        else{
+          log.info("Failed the valid token test");
         }
       } catch (Exception e) {
         log.error(
             "Error on filter once per request, path {}, error: {}",
             request.getRequestURI(),
             e.getMessage());
+        log.warn("Error on filter once per request, path {}, error: {}", request.getRequestURI(), e.getMessage());
         BaseResponseDTO responseDTO = new BaseResponseDTO();
         responseDTO.setCode(String.valueOf(HttpStatus.UNAUTHORIZED.value()));
         responseDTO.setMessage(e.getLocalizedMessage());

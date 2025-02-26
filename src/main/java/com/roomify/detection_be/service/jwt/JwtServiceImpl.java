@@ -3,6 +3,7 @@ package com.roomify.detection_be.service.jwt;
 import com.roomify.detection_be.config.JwtConfig;
 import com.roomify.detection_be.exception.BaseException;
 import com.roomify.detection_be.service.basicOauth.UserDetailsCustom;
+import com.roomify.detection_be.web.controller.api.UserController;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -16,6 +17,8 @@ import javax.crypto.SecretKey;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -86,12 +89,14 @@ public class JwtServiceImpl implements JwtService {
     public boolean isValidToken(String token) {
         try {
             final String username = extractUsername(token);
+            log.info("Username: {}", username);
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
+            log.info("User details: {}", userDetails);
             return !ObjectUtils.isEmpty(userDetails)
                     && !isTokenExpired(token)
                     && !tokenBlacklistService.isTokenBlacklisted(token);
         } catch (Exception e) {
+            log.info("The token invalid because: {}", e.getMessage());
             return false;
         }
     }
