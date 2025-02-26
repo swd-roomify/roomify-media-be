@@ -11,3 +11,4 @@ public class DetectionBeApplication {
     SpringApplication.run(DetectionBeApplication.class, args);
   }
 }
+
