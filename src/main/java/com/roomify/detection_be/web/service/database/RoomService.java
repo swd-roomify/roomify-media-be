@@ -40,7 +40,6 @@ public class RoomService {
 
     public RoomDtoRes CreateRoom(RoomCreateDtoReq roomCreateDtoReq) {
         Room room = new Room();
-        room.setId(String.valueOf(snowflake.nextId()));
         room.setRoomCode(String.valueOf(snowflake.nextId()));
         room.setName(roomCreateDtoReq.getRoomName());
 
@@ -48,6 +47,10 @@ public class RoomService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatusCode.valueOf(404), "User not found"));
 
         room.setHost(user);
+
+        RoomType type = roomTypeRepository.findByName("DEFAULT")
+                .orElseThrow(() -> new ResponseStatusException(HttpStatusCode.valueOf(404), "Room type not found"));
+        room.setRoomType(type);
         Room savedRoom = roomRepository.save(room);
 
         return new RoomDtoRes(savedRoom.getId(), savedRoom.getName(), savedRoom.getRoomCode(), savedRoom.getHost().getUserId(), savedRoom.getCreatedAt());

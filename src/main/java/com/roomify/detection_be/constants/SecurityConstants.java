@@ -1,5 +1,6 @@
 package com.roomify.detection_be.constants;
 
+
 public interface SecurityConstants {
     String[] PUBLIC_URLS = {
             "/api/v1/register-account",
@@ -19,8 +20,9 @@ public interface SecurityConstants {
 
     String ADMIN_URL_PREFIX = "/admin/**";
     String USER_URL_PREFIX = "/user/**";
-
-    String FRONTEND_CALLBACK_URL = "http://localhost:5173/api/auth/oauth2/success";
+    String FRONTEND_CALLBACK_URL = System.getenv("FRONTEND_CALLBACK_URL") != null
+            ? System.getenv("FRONTEND_CALLBACK_URL")
+            : "http://localhost:5173/api/auth/oauth2/success";
     String ERROR_QUERY_PARAM = "?errorMessage=%s";
     String TOKEN_QUERY_PARAM = "?token=%s";
     String LOGOUT_URL = "/logout";
