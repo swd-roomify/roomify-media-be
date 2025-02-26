@@ -18,7 +18,10 @@ import org.springframework.util.ObjectUtils;
 @Service
 public class UserDetailsServiceCustom implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private UserRepository userRepository;
+    public UserDetailsServiceCustom(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

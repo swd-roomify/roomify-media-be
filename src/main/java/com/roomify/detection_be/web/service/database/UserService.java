@@ -1,7 +1,7 @@
 package com.roomify.detection_be.web.service.database;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
-import com.roomify.detection_be.repository.FriendShipRepository;
+import com.roomify.detection_be.Repository.FriendShipRepository;
 import com.roomify.detection_be.repository.UserRepository;
 import com.roomify.detection_be.service.basicOauth.UserServiceOauth;
 import com.roomify.detection_be.utility.SnowflakeGenerator;
