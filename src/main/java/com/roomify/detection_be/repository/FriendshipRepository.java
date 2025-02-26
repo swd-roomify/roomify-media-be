@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FriendShipRepository extends JpaRepository<Friendship, String> {
-  Optional<Friendship> findByUser1AndUser2(Optional<User> user1, Optional<User> byId);
+    Optional<Friendship> findByUser1AndUser2(Optional<User> user1, Optional<User> byId);
 }
