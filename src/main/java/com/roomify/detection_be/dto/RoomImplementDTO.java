@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class RoomImplementDTO {
-    private String roomId;
-    private String name;
-    private String hostId;
-    private String roomTypeId;
+  private String roomId;
+  private String name;
+  private String hostId;
+  private String roomTypeId;
 }

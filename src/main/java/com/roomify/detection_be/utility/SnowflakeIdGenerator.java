@@ -5,60 +5,61 @@ import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.id.IdentifierGenerator;
 
 public class SnowflakeIdGenerator implements IdentifierGenerator {
-    private final long epoch = 1609459200000L;
-    private final int nodeId;
-    private static final int NODE_ID_BITS = 10;
-    private static final int SEQUENCE_BITS = 12;
-    private static final int MAX_SEQUENCE = (1 << SEQUENCE_BITS) - 1;
+  private final long epoch = 1609459200000L;
+  private final int nodeId;
+  private static final int NODE_ID_BITS = 10;
+  private static final int SEQUENCE_BITS = 12;
+  private static final int MAX_SEQUENCE = (1 << SEQUENCE_BITS) - 1;
 
-    private static long lastTimestamp = -1L;
-    private static long sequence = 0L;
+  private static long lastTimestamp = -1L;
+  private static long sequence = 0L;
 
-    public SnowflakeIdGenerator() {
-        // You can get this from configuration or environment
-        this.nodeId = 1; // Default node ID
+  public SnowflakeIdGenerator() {
+    // You can get this from configuration or environment
+    this.nodeId = 1; // Default node ID
+  }
+
+  @Override
+  public Object generate(SharedSessionContractImplementor session, Object object)
+      throws HibernateException {
+    return nextId();
+  }
+
+  private synchronized String nextId() {
+    long timestamp = currentTimestamp();
+
+    if (timestamp < lastTimestamp) {
+      throw new HibernateException("Clock moved backwards. Refusing to generate ID.");
     }
 
-    @Override
-    public Object generate(SharedSessionContractImplementor session, Object object)
-            throws HibernateException {
-        return nextId();
+    if (timestamp == lastTimestamp) {
+      sequence = (sequence + 1) & MAX_SEQUENCE;
+      if (sequence == 0) {
+        timestamp = waitNextMillis(lastTimestamp);
+      }
+    } else {
+      sequence = 0;
     }
 
-    private synchronized String nextId() {
-        long timestamp = currentTimestamp();
+    lastTimestamp = timestamp;
 
-        if (timestamp < lastTimestamp) {
-            throw new HibernateException("Clock moved backwards. Refusing to generate ID.");
-        }
+    long id =
+        ((timestamp - epoch) << (NODE_ID_BITS + SEQUENCE_BITS))
+            | ((long) nodeId << SEQUENCE_BITS)
+            | sequence;
 
-        if (timestamp == lastTimestamp) {
-            sequence = (sequence + 1) & MAX_SEQUENCE;
-            if (sequence == 0) {
-                timestamp = waitNextMillis(lastTimestamp);
-            }
-        } else {
-            sequence = 0;
-        }
+    return String.valueOf(id);
+  }
 
-        lastTimestamp = timestamp;
+  private long currentTimestamp() {
+    return System.currentTimeMillis();
+  }
 
-        long id = ((timestamp - epoch) << (NODE_ID_BITS + SEQUENCE_BITS))
-                | ((long) nodeId << SEQUENCE_BITS)
-                | sequence;
-
-        return String.valueOf(id);
-    }
-
-    private long currentTimestamp() {
-        return System.currentTimeMillis();
-    }
-
-    private long waitNextMillis(long lastTimestamp) {
-        long timestamp;
-        do {
-            timestamp = currentTimestamp();
-        } while (timestamp <= lastTimestamp);
-        return timestamp;
-    }
+  private long waitNextMillis(long lastTimestamp) {
+    long timestamp;
+    do {
+      timestamp = currentTimestamp();
+    } while (timestamp <= lastTimestamp);
+    return timestamp;
+  }
 }

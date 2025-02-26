@@ -8,8 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
-import static org.springframework.boot.convert.ApplicationConversionService.configure;
-
 @Configuration
 public class AppConfig {
   @Bean
@@ -24,7 +22,8 @@ public class AppConfig {
             .configure(DeserializationFeature.USE_LONG_FOR_INTS, true)
             .configure(DeserializationFeature.ACCEPT_FLOAT_AS_INT, false)
             .enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING)
-            .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE) //remember to change to lower camel case later
+            .propertyNamingStrategy(
+                PropertyNamingStrategies.SNAKE_CASE) // remember to change to lower camel case later
             .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
             .build();
 

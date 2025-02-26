@@ -1,8 +1,5 @@
 package com.roomify.detection_be.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import io.swagger.v3.core.jackson.ModelResolver;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.servers.Server;
@@ -21,19 +18,20 @@ import org.springframework.context.annotation.Configuration;
 public class OpenAPIConfig {
 
   private SecurityScheme createAPIKeyScheme() {
-    return new SecurityScheme().type(SecurityScheme.Type.HTTP)
-            .bearerFormat("JWT")
-            .scheme("bearer");
+    return new SecurityScheme().type(SecurityScheme.Type.HTTP).bearerFormat("JWT").scheme("bearer");
   }
+
   @Bean
   public OpenAPI openAPI() {
-    return new OpenAPI().addSecurityItem(new SecurityRequirement().
-                    addList("Bearer Authentication"))
-            .components(new Components().addSecuritySchemes
-                    ("Bearer Authentication", createAPIKeyScheme()))
-            .info(new io.swagger.v3.oas.models.info.Info().title("Roomify API")
-                    .description("Development API.")
-                    .version("1.0.0").contact(new Contact().name("Đặng Quang Huy")
-                            .email( "Quanghuy01062004@gmail.com")));
+    return new OpenAPI()
+        .addSecurityItem(new SecurityRequirement().addList("Bearer Authentication"))
+        .components(
+            new Components().addSecuritySchemes("Bearer Authentication", createAPIKeyScheme()))
+        .info(
+            new io.swagger.v3.oas.models.info.Info()
+                .title("Roomify API")
+                .description("Development API.")
+                .version("1.0.0")
+                .contact(new Contact().name("Đặng Quang Huy").email("Quanghuy01062004@gmail.com")));
   }
 }

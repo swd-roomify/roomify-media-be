@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BaseException extends RuntimeException {
 
-    private String code;
+  private String code;
 
-    private String message;
+  private String message;
 }

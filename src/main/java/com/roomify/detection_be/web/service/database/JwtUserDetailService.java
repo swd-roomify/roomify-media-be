@@ -1,6 +1,6 @@
 package com.roomify.detection_be.web.service.database;
 
-import com.roomify.detection_be.repository.UserRepository;
+import com.roomify.detection_be.Repository.UserRepository;
 import com.roomify.detection_be.web.dtos.jwt.CustomUserDetailsDTO;
 import com.roomify.detection_be.web.entities.User;
 import lombok.AllArgsConstructor;
@@ -16,13 +16,16 @@ import org.springframework.stereotype.Service;
 @NoArgsConstructor
 @Slf4j
 public class JwtUserDetailService implements UserDetailsService {
-    @Autowired
-    private UserRepository userRepository;
-    @Override
-    public CustomUserDetailsDTO loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
-        log.info("User loaded with username: {} and email: {}", user.getUsername(), user.getEmail());
-        return new CustomUserDetailsDTO(user);
-    }
+  @Autowired private UserRepository userRepository;
+
+  @Override
+  public CustomUserDetailsDTO loadUserByUsername(String username) throws UsernameNotFoundException {
+    User user =
+        userRepository
+            .findByUsername(username)
+            .orElseThrow(
+                () -> new UsernameNotFoundException("User not found with username: " + username));
+    log.info("User loaded with username: {} and email: {}", user.getUsername(), user.getEmail());
+    return new CustomUserDetailsDTO(user);
+  }
 }
