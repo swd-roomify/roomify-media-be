@@ -9,11 +9,12 @@ import lombok.*;
 @Setter
 @Builder
 public class UserJoinReq {
-    @JsonProperty("userId")
-    private String userId;
-    @JsonProperty("username")
-    private String username;
-    @JsonProperty("character")
-    private String character;
+  @JsonProperty("userId")
+  private String userId;
 
+  @JsonProperty("username")
+  private String username;
+
+  @JsonProperty("character")
+  private String character;
 }

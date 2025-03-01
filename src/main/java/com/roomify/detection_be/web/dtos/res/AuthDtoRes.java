@@ -11,10 +11,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class AuthDtoRes {
-    private TokenDTO token;
-    private UserDtoRes user;
+  private TokenDTO token;
+  private UserDtoRes user;
 
-    public static AuthDtoRes toDto(TokenDTO token, UserDtoRes user) {
-        return new AuthDtoRes(token, user);
-    }
+  public static AuthDtoRes toDto(TokenDTO token, UserDtoRes user) {
+    return new AuthDtoRes(token, user);
+  }
 }

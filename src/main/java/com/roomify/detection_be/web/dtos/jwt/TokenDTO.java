@@ -11,6 +11,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class TokenDTO {
 
-    private String token;
-    private final String type = "Bearer";
+  private String token;
+  private final String type = "Bearer";
 }

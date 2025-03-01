@@ -9,11 +9,11 @@ import lombok.Getter;
 @Getter
 public class ApplicationException extends RuntimeException {
 
-    private final ErrorCode errorCode;
-    private final Object[] args;
+  private final ErrorCode errorCode;
+  private final Object[] args;
 
-    public ApplicationException(ErrorCode errorCode, Object... args) {
-        this.errorCode = errorCode;
-        this.args = args;
-    }
+  public ApplicationException(ErrorCode errorCode, Object... args) {
+    this.errorCode = errorCode;
+    this.args = args;
+  }
 }

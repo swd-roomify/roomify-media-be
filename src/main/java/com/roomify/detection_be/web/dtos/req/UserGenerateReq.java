@@ -9,10 +9,12 @@ import lombok.*;
 @Setter
 @Builder
 public class UserGenerateReq {
-    @JsonProperty("user_id")
-    private String userId;
-    @JsonProperty("username")
-    private String username;
-    @JsonProperty("character")
-    private String character;
+  @JsonProperty("user_id")
+  private String userId;
+
+  @JsonProperty("username")
+  private String username;
+
+  @JsonProperty("character")
+  private String character;
 }

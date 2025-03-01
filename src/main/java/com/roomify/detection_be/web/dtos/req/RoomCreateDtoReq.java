@@ -11,8 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class RoomCreateDtoReq {
-    @JsonProperty("roomName")
-    private String roomName;
-    @JsonProperty("hostId")
-    private String hostId;
+  @JsonProperty("roomName")
+  private String roomName;
+
+  @JsonProperty("hostId")
+  private String hostId;
 }

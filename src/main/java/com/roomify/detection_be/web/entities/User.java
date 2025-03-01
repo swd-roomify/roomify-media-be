@@ -1,12 +1,9 @@
 package com.roomify.detection_be.web.entities;
 
-import com.roomify.detection_be.web.entities.Role;
 import jakarta.persistence.*;
+import java.time.Instant;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
-
-import java.time.Instant;
-import java.time.LocalDateTime;
 
 @Table(name = "users")
 @Entity
@@ -18,7 +15,9 @@ import java.time.LocalDateTime;
 public class User {
   @Id
   @GeneratedValue(generator = "snowflake-id")
-  @GenericGenerator(name = "snowflake-id", strategy = "com.roomify.detection_be.utility.SnowflakeIdGenerator")
+  @GenericGenerator(
+      name = "snowflake-id",
+      strategy = "com.roomify.detection_be.utility.SnowflakeIdGenerator")
   @Column(name = "user_id", unique = true)
   private String userId;
 

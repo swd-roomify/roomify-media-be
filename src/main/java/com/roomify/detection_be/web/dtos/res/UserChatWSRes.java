@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserChatWSRes {
-    private String userId;
-    private String username;
-    private String message;
+  private String userId;
+  private String username;
+  private String message;
 }

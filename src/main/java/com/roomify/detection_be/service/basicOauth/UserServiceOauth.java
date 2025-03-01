@@ -7,10 +7,11 @@ import java.util.Optional;
 
 public interface UserServiceOauth {
 
-    BaseResponseDTO<User> registerAccount(UserDTO userDTO);
+  BaseResponseDTO<User> registerAccount(UserDTO userDTO);
 
-    void updateAccount(UserDTO userDTO);
+  void updateAccount(UserDTO userDTO);
 
-    Optional<User> findCurrentUser();
-    User getCurrentUser(String username);
+  Optional<User> findCurrentUser();
+
+  User getCurrentUser(String username);
 }

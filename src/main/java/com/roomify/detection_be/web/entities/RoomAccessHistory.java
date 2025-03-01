@@ -1,9 +1,7 @@
 package com.roomify.detection_be.web.entities;
 
 import jakarta.persistence.*;
-
 import java.time.Instant;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,27 +15,29 @@ import org.hibernate.annotations.GenericGenerator;
 @Setter
 @AllArgsConstructor
 public class RoomAccessHistory {
-    @Id
-    @GeneratedValue(generator = "snowflake-id")
-    @GenericGenerator(name = "snowflake-id", strategy = "com.roomify.detection_be.utility.SnowflakeIdGenerator")
-    private String id;
+  @Id
+  @GeneratedValue(generator = "snowflake-id")
+  @GenericGenerator(
+      name = "snowflake-id",
+      strategy = "com.roomify.detection_be.utility.SnowflakeIdGenerator")
+  private String id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+  @ManyToOne
+  @JoinColumn(name = "user_id", nullable = false)
+  private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "room_id", nullable = false)
-    private Room room;
+  @ManyToOne
+  @JoinColumn(name = "room_id", nullable = false)
+  private Room room;
 
-    @Column(nullable = false)
-    private String action;
+  @Column(nullable = false)
+  private String action;
 
-    @Column(nullable = false, updatable = false)
-    private Instant accessAt;
+  @Column(nullable = false, updatable = false)
+  private Instant accessAt;
 
-    @PrePersist
-    protected void onCreate() {
-        this.accessAt = Instant.now();
-    }
+  @PrePersist
+  protected void onCreate() {
+    this.accessAt = Instant.now();
+  }
 }

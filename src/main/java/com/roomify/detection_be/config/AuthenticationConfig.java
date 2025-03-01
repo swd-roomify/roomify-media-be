@@ -9,18 +9,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 public class AuthenticationConfig {
-    @Bean
-    public JwtConfig jwtConfig() {
-        return new JwtConfig();
-    }
+  @Bean
+  public JwtConfig jwtConfig() {
+    return new JwtConfig();
+  }
 
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+  @Bean
+  public BCryptPasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 
-    @Bean
-    public UserDetailsService userDetailsService(UserRepository userRepository) {
-        return new UserDetailsServiceCustom(userRepository);
-    }
+  @Bean
+  public UserDetailsService userDetailsService(UserRepository userRepository) {
+    return new UserDetailsServiceCustom(userRepository);
+  }
 }

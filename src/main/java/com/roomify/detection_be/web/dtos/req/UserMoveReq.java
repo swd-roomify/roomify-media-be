@@ -9,10 +9,12 @@ import lombok.*;
 @Setter
 @Builder
 public class UserMoveReq {
-    @JsonProperty("user_id")
-    private String userId;
-    @JsonProperty("position_x")
-    private int positionX;
-    @JsonProperty("position_y")
-    private int positionY;
+  @JsonProperty("user_id")
+  private String userId;
+
+  @JsonProperty("position_x")
+  private int positionX;
+
+  @JsonProperty("position_y")
+  private int positionY;
 }

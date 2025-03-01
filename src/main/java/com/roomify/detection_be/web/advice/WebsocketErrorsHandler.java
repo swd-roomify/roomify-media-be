@@ -7,14 +7,14 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 public class WebsocketErrorsHandler {
-    private final SimpMessagingTemplate messagingTemplate;
+  private final SimpMessagingTemplate messagingTemplate;
 
-    public WebsocketErrorsHandler(SimpMessagingTemplate messagingTemplate) {
-        this.messagingTemplate = messagingTemplate;
-    }
+  public WebsocketErrorsHandler(SimpMessagingTemplate messagingTemplate) {
+    this.messagingTemplate = messagingTemplate;
+  }
 
-    @MessageMapping(WebSocketPath.ERRORS)
-    public void handleErrors(String errorMessage) {
-        messagingTemplate.convertAndSend(WebSocketPath.TOPIC_ERRORS, errorMessage);
-    }
+  @MessageMapping(WebSocketPath.ERRORS)
+  public void handleErrors(String errorMessage) {
+    messagingTemplate.convertAndSend(WebSocketPath.TOPIC_ERRORS, errorMessage);
+  }
 }

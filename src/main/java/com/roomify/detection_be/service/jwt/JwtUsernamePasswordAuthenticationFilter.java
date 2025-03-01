@@ -24,86 +24,86 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Slf4j
 public class JwtUsernamePasswordAuthenticationFilter
-        extends AbstractAuthenticationProcessingFilter {
+    extends AbstractAuthenticationProcessingFilter {
 
-    private final JwtService jwtService;
+  private final JwtService jwtService;
 
-    private final ObjectMapper objectMapper;
+  private final ObjectMapper objectMapper;
 
-    public JwtUsernamePasswordAuthenticationFilter(
-            AuthenticationManager manager, JwtConfig jwtConfig, JwtService jwtService) {
-        super(new AntPathRequestMatcher(jwtConfig.getUrl(), "POST"));
-        setAuthenticationManager(manager);
-        this.objectMapper = new ObjectMapper();
-        this.jwtService = jwtService;
-    }
+  public JwtUsernamePasswordAuthenticationFilter(
+      AuthenticationManager manager, JwtConfig jwtConfig, JwtService jwtService) {
+    super(new AntPathRequestMatcher(jwtConfig.getUrl(), "POST"));
+    setAuthenticationManager(manager);
+    this.objectMapper = new ObjectMapper();
+    this.jwtService = jwtService;
+  }
 
-    @Override
-    public Authentication attemptAuthentication(
-            HttpServletRequest request, HttpServletResponse response)
-            throws AuthenticationException, IOException {
-        log.info("Start attempt to authentication");
-        UserRequest loginRequest = objectMapper.readValue(request.getInputStream(), UserRequest.class);
-        log.info("End attempt to authentication");
+  @Override
+  public Authentication attemptAuthentication(
+      HttpServletRequest request, HttpServletResponse response)
+      throws AuthenticationException, IOException {
+    log.info("Start attempt to authentication");
+    UserRequest loginRequest = objectMapper.readValue(request.getInputStream(), UserRequest.class);
+    log.info("End attempt to authentication");
 
-        UsernamePasswordAuthenticationToken authRequest =
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUsername(), loginRequest.getPassword());
+    UsernamePasswordAuthenticationToken authRequest =
+        new UsernamePasswordAuthenticationToken(
+            loginRequest.getUsername(), loginRequest.getPassword());
 
-        setDetails(request, authRequest);
+    setDetails(request, authRequest);
 
-        return this.getAuthenticationManager().authenticate(authRequest);
-    }
+    return this.getAuthenticationManager().authenticate(authRequest);
+  }
 
-    protected void setDetails(
-            HttpServletRequest request, UsernamePasswordAuthenticationToken authRequest) {
-        authRequest.setDetails(this.authenticationDetailsSource.buildDetails(request));
-    }
+  protected void setDetails(
+      HttpServletRequest request, UsernamePasswordAuthenticationToken authRequest) {
+    authRequest.setDetails(this.authenticationDetailsSource.buildDetails(request));
+  }
 
-    @Override
-    protected void successfulAuthentication(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain chain,
-            Authentication authentication)
-            throws IOException {
-        UserDetailsCustom userDetailsCustom = (UserDetailsCustom) authentication.getPrincipal();
-        String accessToken = jwtService.generateToken(userDetailsCustom);
-        BaseResponseDTO authResponse =
-                BaseResponseDTO.builder()
-                        .code(String.valueOf(HttpStatus.OK.value()))
-                        .message("Authentication successful")
-                        .data(
-                                new HashMap<String, Object>() {
-                                    {
-                                        put("token", accessToken);
-                                        put("username", userDetailsCustom.getUsername());
-                                        put(
-                                                "roles",
-                                                userDetailsCustom.getAuthorities().stream()
-                                                        .map(GrantedAuthority::getAuthority)
-                                                        .collect(Collectors.toList()));
-                                    }
-                                })
-                        .build();
-        response.setContentType("application/json;charset=UTF-8");
-        response.setStatus(HttpStatus.OK.value());
-        response.getWriter().write(objectMapper.writeValueAsString(authResponse));
-    }
+  @Override
+  protected void successfulAuthentication(
+      HttpServletRequest request,
+      HttpServletResponse response,
+      FilterChain chain,
+      Authentication authentication)
+      throws IOException {
+    UserDetailsCustom userDetailsCustom = (UserDetailsCustom) authentication.getPrincipal();
+    String accessToken = jwtService.generateToken(userDetailsCustom);
+    BaseResponseDTO authResponse =
+        BaseResponseDTO.builder()
+            .code(String.valueOf(HttpStatus.OK.value()))
+            .message("Authentication successful")
+            .data(
+                new HashMap<String, Object>() {
+                  {
+                    put("token", accessToken);
+                    put("username", userDetailsCustom.getUsername());
+                    put(
+                        "roles",
+                        userDetailsCustom.getAuthorities().stream()
+                            .map(GrantedAuthority::getAuthority)
+                            .collect(Collectors.toList()));
+                  }
+                })
+            .build();
+    response.setContentType("application/json;charset=UTF-8");
+    response.setStatus(HttpStatus.OK.value());
+    response.getWriter().write(objectMapper.writeValueAsString(authResponse));
+  }
 
-    @Override
-    protected void unsuccessfulAuthentication(
-            HttpServletRequest request, HttpServletResponse response, AuthenticationException failed)
-            throws IOException {
-        BaseResponseDTO responseDTO = new BaseResponseDTO();
-        responseDTO.setCode(String.valueOf(HttpStatus.UNAUTHORIZED.value()));
-        responseDTO.setMessage(failed.getLocalizedMessage());
+  @Override
+  protected void unsuccessfulAuthentication(
+      HttpServletRequest request, HttpServletResponse response, AuthenticationException failed)
+      throws IOException {
+    BaseResponseDTO responseDTO = new BaseResponseDTO();
+    responseDTO.setCode(String.valueOf(HttpStatus.UNAUTHORIZED.value()));
+    responseDTO.setMessage(failed.getLocalizedMessage());
 
-        String json = HelperUtils.JSON_WRITER.writeValueAsString(responseDTO);
+    String json = HelperUtils.JSON_WRITER.writeValueAsString(responseDTO);
 
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.setContentType("application/json; charset=UTF-8");
-        response.getWriter().write(json);
-        return;
-    }
+    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+    response.setContentType("application/json; charset=UTF-8");
+    response.getWriter().write(json);
+    return;
+  }
 }

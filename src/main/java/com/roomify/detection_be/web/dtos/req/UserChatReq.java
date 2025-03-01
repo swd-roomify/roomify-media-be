@@ -9,8 +9,9 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class UserChatReq {
-    @JsonProperty("userId")
-    private String userId;
-    @JsonProperty("message")
-    private String message;
+  @JsonProperty("userId")
+  private String userId;
+
+  @JsonProperty("message")
+  private String message;
 }

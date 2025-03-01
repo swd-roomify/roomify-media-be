@@ -20,10 +20,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         .withSockJS();
   }
 
-
-    @Override
-    public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.setApplicationDestinationPrefixes(WebSocketPath.APP);
-        registry.enableSimpleBroker(WebSocketPath.TOPIC);
-    }
+  @Override
+  public void configureMessageBroker(MessageBrokerRegistry registry) {
+    registry.setApplicationDestinationPrefixes(WebSocketPath.APP);
+    registry.enableSimpleBroker(WebSocketPath.TOPIC);
+  }
 }
