@@ -1,4 +1,4 @@
-package com.roomify.detection_be.repository;
+package com.roomify.detection_be.web.repository;
 
 import com.roomify.detection_be.web.entities.Role;
 import java.util.Optional;

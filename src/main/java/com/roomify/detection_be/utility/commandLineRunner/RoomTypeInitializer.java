@@ -1,6 +1,6 @@
 package com.roomify.detection_be.utility.commandLineRunner;
 
-import com.roomify.detection_be.repository.RoomTypeRepository;
+import com.roomify.detection_be.web.repository.RoomTypeRepository;
 import com.roomify.detection_be.web.entities.RoomType;
 import java.util.List;
 import org.springframework.boot.CommandLineRunner;

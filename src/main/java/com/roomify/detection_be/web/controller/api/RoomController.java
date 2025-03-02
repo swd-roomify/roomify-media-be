@@ -7,55 +7,57 @@ import com.roomify.detection_be.web.entities.RoomAccessHistory;
 import com.roomify.detection_be.web.entities.RoomParticipant;
 import com.roomify.detection_be.web.service.database.RoomService;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/rooms")
+@RequiredArgsConstructor
 public class RoomController {
-  @Autowired private RoomService roomService;
+  private final RoomService roomService;
 
   @PostMapping
-  public ResponseEntity<RoomDtoRes> CreateRoom(@RequestBody RoomCreateDtoReq room) {
-    return ResponseEntity.ok(roomService.CreateRoom(room));
+  public ResponseEntity<?> createRoom(@RequestBody RoomCreateDtoReq room) {
+    return ResponseEntity.ok(roomService.createRoom(room));
   }
 
   @GetMapping("/room/{roomId}")
-  public ResponseEntity<RoomDtoRes> GetRoomById(@PathVariable String roomId) {
-    return ResponseEntity.ok(roomService.GetRoomById(roomId));
+  public ResponseEntity<?> getRoomById(@PathVariable String roomId) {
+    return ResponseEntity.ok(roomService.getRoomById(roomId));
   }
 
   @GetMapping("/code/{roomCode}")
-  public ResponseEntity<RoomDtoRes> GetRoomByCode(@PathVariable String roomCode) {
-    return ResponseEntity.ok(roomService.GetRoomByCode(roomCode));
+  public ResponseEntity<?> getRoomByCode(@PathVariable String roomCode) {
+    return ResponseEntity.ok(roomService.getRoomByCode(roomCode));
   }
 
   @GetMapping("/user/{userId}")
-  public ResponseEntity<List<RoomDtoRes>> GetRoomByUserId(@PathVariable String userId) {
-    return ResponseEntity.ok(roomService.GetRoomsByUserId(userId));
+  public ResponseEntity<?> getRoomByUserId(@PathVariable String userId) {
+    return ResponseEntity.ok(roomService.getRoomsByUserId(userId));
   }
 
   @DeleteMapping("/delete/{roomId}")
-  public ResponseEntity<String> deleteRoom(@PathVariable String roomId) {
+  public ResponseEntity<?> deleteRoom(@PathVariable String roomId) {
     roomService.deleteRoom(roomId);
     return ResponseEntity.ok("Room deleted successfully");
   }
 
   @GetMapping("/list")
-  public ResponseEntity<List<Room>> getAllRooms() {
+  public ResponseEntity<?> getAllRooms() {
     List<Room> rooms = roomService.getRooms();
     return ResponseEntity.ok(rooms);
   }
 
   @GetMapping("/participants/{roomId}")
-  public ResponseEntity<List<RoomParticipant>> getParticipants(@PathVariable String roomId) {
+  public ResponseEntity<?> getParticipants(@PathVariable String roomId) {
     List<RoomParticipant> participants = roomService.getParticipants(roomId);
     return ResponseEntity.ok(participants);
   }
 
   @GetMapping("/history/{roomId}")
-  public ResponseEntity<List<RoomAccessHistory>> getRoomHistory(@PathVariable String roomId) {
+  public ResponseEntity<?> getRoomHistory(@PathVariable String roomId) {
     List<RoomAccessHistory> history = roomService.logRoomAccess(roomId);
     return ResponseEntity.ok(history);
   }

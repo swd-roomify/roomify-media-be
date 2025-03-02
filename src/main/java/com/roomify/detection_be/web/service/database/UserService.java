@@ -1,8 +1,8 @@
 package com.roomify.detection_be.web.service.database;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
-import com.roomify.detection_be.repository.FriendShipRepository;
-import com.roomify.detection_be.repository.UserRepository;
+import com.roomify.detection_be.web.repository.FriendShipRepository;
+import com.roomify.detection_be.web.repository.UserRepository;
 import com.roomify.detection_be.service.basicOauth.UserServiceOauth;
 import com.roomify.detection_be.utility.SnowflakeGenerator;
 import com.roomify.detection_be.utility.jwt.JwtTokenProvider;
@@ -17,7 +17,7 @@ import com.roomify.detection_be.web.dtos.res.UserWSRes;
 import com.roomify.detection_be.web.entities.Friendship;
 import com.roomify.detection_be.web.entities.User;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,23 +25,30 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class UserService {
-  @Autowired private JwtTokenProvider jwtTokenProvider;
+  private final JwtTokenProvider jwtTokenProvider;
   private final AuthenticationManager authenticationManager;
-  @Autowired private UserServiceOauth userServiceOauth;
-  @Autowired private UserRepository userRepository;
-  @Autowired private FriendShipRepository friendShipRepository;
+  private final UserServiceOauth userServiceOauth;
+  private final UserRepository userRepository;
+  private final FriendShipRepository friendShipRepository;
 
   SnowflakeGenerator snowflake = new SnowflakeGenerator(1);
 
-  public UserService(AuthenticationManager authenticationManager) {
+  public UserService(JwtTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager, UserServiceOauth userServiceOauth, UserRepository userRepository, FriendShipRepository friendShipRepository) {
+    this.jwtTokenProvider = jwtTokenProvider;
     this.authenticationManager = authenticationManager;
+    this.userServiceOauth = userServiceOauth;
+    this.userRepository = userRepository;
+    this.friendShipRepository = friendShipRepository;
   }
 
-  public UserDtoRes CreateUser(UserCreateDtoReq userCreateDtoReq) {
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
+  public UserDtoRes createUser(UserCreateDtoReq userCreateDtoReq) {
     boolean emailExist = userRepository.existsByEmail(userCreateDtoReq.getEmail());
     boolean usernameExist = userRepository.existsByUsername(userCreateDtoReq.getUsername());
     if (emailExist || usernameExist) {
@@ -52,7 +59,6 @@ public class UserService {
     userCreateDtoReq.setPassword(
         BCrypt.withDefaults().hashToString(12, userCreateDtoReq.getPassword().toCharArray()));
     User user = new User();
-    user.setUserId(String.valueOf(snowflake.nextId()));
     user.setEmail(userCreateDtoReq.getEmail());
     user.setUsername(userCreateDtoReq.getUsername());
     user.setPassword(userCreateDtoReq.getPassword());
@@ -64,7 +70,7 @@ public class UserService {
         savedUser.getCreatedAt());
   }
 
-  public AuthDtoRes GetUserAuthorize(UserCredentialReq userCredentialReq) {
+  public AuthDtoRes getUserAuthorize(UserCredentialReq userCredentialReq) {
     User user =
         userRepository
             .findByEmail(userCredentialReq.getEmail())
@@ -88,7 +94,7 @@ public class UserService {
         new UserDtoRes(user.getUserId(), user.getUsername(), user.getEmail(), user.getCreatedAt()));
   }
 
-  public UserWSRes GenerateCharacter(UserGenerateReq user) {
+  public UserWSRes generateCharacter(UserGenerateReq user) {
     return new UserWSRes(user.getUserId(), user.getUsername(), user.getCharacter(), 400, 400);
   }
 

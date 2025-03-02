@@ -2,13 +2,14 @@ package com.roomify.detection_be.constants;
 
 public interface SecurityConstants {
   String[] PUBLIC_URLS = {
-    "/api/v1/register-account",
     "/oauth2/authorization/google",
     "/oauth2/authorization/github",
     "/login/oauth2/code/*",
     "/grantcode",
     "/api/v1/login/non-type",
-    "/api/auth/**"
+    "/api/auth/**",
+    "/api/auth/*",
+    "/api/user/v1/**"
   };
 
   String[] WEBSOCKET_URLS = {"/ws/**", "/ws/info/**", "/topic/**"};

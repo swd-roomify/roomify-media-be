@@ -8,6 +8,7 @@ import com.roomify.detection_be.service.oauth2.handler.CustomOAuth2FailureHandle
 import com.roomify.detection_be.service.oauth2.handler.CustomOAuth2SuccessHandler;
 import com.roomify.detection_be.service.oauth2.security.CustomOAuth2UserDetailsService;
 import com.roomify.detection_be.utility.jwt.JwtAuthenticationFilter;
+import com.roomify.detection_be.web.repository.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,22 +17,27 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+@EnableWebSecurity
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
-  private final CustomAuthenticationProvider customAuthenticationProvider;
   private final JwtConfig jwtConfig;
   private final JwtService jwtService;
-  private final CustomOAuth2UserDetailsService customOAuth2UserDetailsService;
-  private final OAuth2AuthorizedClientService authorizedClientService;
-  private final JwtTokenSyncOAuth2 jwtTokenSyncService;
   private final ObjectMapper objectMapper;
+  private final UserRepository userRepository;
+  private final JwtTokenSyncOAuth2 jwtTokenSyncService;
+  private final OAuth2AuthorizedClientService authorizedClientService;
+  private final CustomAuthenticationProvider customAuthenticationProvider;
+  private final CustomOAuth2UserDetailsService customOAuth2UserDetailsService;
 
   @Bean
   public JwtAuthenticationFilter jwtAuthenticationFilter() {
@@ -64,7 +70,7 @@ public class SecurityConfig {
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     AuthenticationManager authManager = authenticationManager(http);
 
-    http.csrf(csrf -> csrf.disable())
+    http.csrf(AbstractHttpConfigurer::disable)
         .cors(cors -> cors.configure(http))
         .authorizeHttpRequests(
             auth ->
@@ -78,7 +84,7 @@ public class SecurityConfig {
                     .hasAuthority(SecurityConstants.ROLE_USER)
                     .anyRequest()
                     .authenticated())
-        .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()))
+        .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
         .exceptionHandling(
             ex ->
                 ex.accessDeniedPage(SecurityConstants.ACCESS_DENIED_PAGE)
@@ -106,7 +112,7 @@ public class SecurityConfig {
         .sessionManagement(
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .addFilterBefore(
-            new JwtUsernamePasswordAuthenticationFilter(authManager, jwtConfig, jwtService),
+            new JwtUsernamePasswordAuthenticationFilter(authManager, jwtConfig, jwtService, userRepository),
             UsernamePasswordAuthenticationFilter.class)
         .addFilterAfter(
             new JwtTokenAuthenticationFilter(jwtConfig, jwtService),

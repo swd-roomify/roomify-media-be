@@ -1,6 +1,6 @@
 package com.roomify.detection_be.config;
 
-import com.roomify.detection_be.repository.UserRepository;
+import com.roomify.detection_be.web.repository.UserRepository;
 import com.roomify.detection_be.service.basicOauth.UserDetailsServiceCustom;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

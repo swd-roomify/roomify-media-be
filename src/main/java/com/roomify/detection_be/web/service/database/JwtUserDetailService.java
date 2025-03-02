@@ -1,6 +1,6 @@
 package com.roomify.detection_be.web.service.database;
 
-import com.roomify.detection_be.repository.UserRepository;
+import com.roomify.detection_be.web.repository.UserRepository;
 import com.roomify.detection_be.web.dtos.jwt.CustomUserDetailsDTO;
 import com.roomify.detection_be.web.entities.User;
 import lombok.AllArgsConstructor;

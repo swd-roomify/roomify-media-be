@@ -2,7 +2,7 @@ package com.roomify.detection_be.service.jwt;
 
 import com.roomify.detection_be.exception.ApplicationErrorCode;
 import com.roomify.detection_be.exception.ApplicationException;
-import com.roomify.detection_be.repository.UserRepository;
+import com.roomify.detection_be.web.repository.UserRepository;
 import com.roomify.detection_be.service.basicOauth.UserDetailsCustom;
 import com.roomify.detection_be.web.entities.User;
 import java.util.List;
@@ -31,7 +31,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
   @Override
   public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-    log.info("Start actual authentication");
     final String username = authentication.getName();
     final String password = authentication.getCredentials().toString();
 
@@ -59,8 +58,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             user.isAccountNonExpired(),
             user.isAccountNonLocked(),
             user.isCredentialsNonExpired());
-
-    log.info("End actual authentication");
 
     return new UsernamePasswordAuthenticationToken(userDetails, password, authorities);
   }

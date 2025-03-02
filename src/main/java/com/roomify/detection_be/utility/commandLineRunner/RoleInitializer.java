@@ -1,6 +1,6 @@
 package com.roomify.detection_be.utility.commandLineRunner;
 
-import com.roomify.detection_be.repository.RoleRepository;
+import com.roomify.detection_be.web.repository.RoleRepository;
 import com.roomify.detection_be.web.entities.Role;
 import java.util.List;
 import org.springframework.boot.CommandLineRunner;

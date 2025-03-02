@@ -1,6 +1,6 @@
 package com.roomify.detection_be.web.service;
 
-import com.roomify.detection_be.repository.UserRepository;
+import com.roomify.detection_be.web.repository.UserRepository;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
