@@ -6,6 +6,7 @@ public interface SecurityConstants {
     "/oauth2/authorization/google",
     "/oauth2/authorization/github",
     "/login/oauth2/code/*",
+    "/oauth2/**",
     "/grantcode",
     "/api/v1/login/non-type",
     "/api/auth/**"

@@ -85,7 +85,7 @@ public class SecurityConfig {
                     .requestMatchers(SecurityConstants.USER_URL_PREFIX)
                     .hasAuthority(SecurityConstants.ROLE_USER)
                     .anyRequest()
-                    .authenticated())
+                    .permitAll())
         .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()))
         .exceptionHandling(
             ex ->
