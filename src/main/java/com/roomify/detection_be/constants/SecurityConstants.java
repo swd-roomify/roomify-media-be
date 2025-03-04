@@ -31,6 +31,6 @@ public interface SecurityConstants {
 
   String SESSION_COOKIE = "JSESSIONID";
 
-  String[] ALLOWED_ORIGINS = {"http://pog.threemusketeer.click:5173", "http://localhost:5173"};
+  String[] ALLOWED_ORIGINS = {"https://pog.threemusketeer.click", "http://localhost:5173"};
   long CORS_MAX_AGE = 3600;
 }
