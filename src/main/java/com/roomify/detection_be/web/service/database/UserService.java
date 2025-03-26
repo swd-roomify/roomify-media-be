@@ -76,6 +76,9 @@ public class UserService {
             .findByEmail(userCredentialReq.getEmail())
             .orElseThrow(
                 () -> new ResponseStatusException(HttpStatusCode.valueOf(404), "User not found"));
+    if(user.getPassword() == null){
+      throw new ResponseStatusException(HttpStatusCode.valueOf(401), "Incorrect login method, password is not initialized here yet");
+    }
     if (!BCrypt.verifyer()
         .verify(userCredentialReq.getPassword().toCharArray(), user.getPassword())
         .verified) {
