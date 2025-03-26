@@ -25,10 +25,10 @@ public class UserController {
   private UserService userService;
   private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
-  @PostMapping("/register")
-  public ResponseEntity<UserDtoRes> CreateUser(@RequestBody UserCreateDtoReq user) {
-    return ResponseEntity.ok(userService.createUser(user));
-  }
+//  @PostMapping("/register")
+//  public ResponseEntity<UserDtoRes> CreateUser(@RequestBody UserCreateDtoReq user) {
+//    return ResponseEntity.ok(userService.createUser(user));
+//  }
 
   @PostMapping("/signin")
   public ResponseEntity<AuthDtoRes> AuthorizeUser(@RequestBody UserCredentialReq user) {
