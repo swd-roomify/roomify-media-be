@@ -73,7 +73,7 @@ public class SecurityConfig {
     AuthenticationManager authManager = authenticationManager(http);
 
     http.csrf(AbstractHttpConfigurer::disable)
-        .cors(cors -> cors.configure(http))
+        .cors(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(
             auth ->
                 auth.requestMatchers(SecurityConstants.PUBLIC_URLS)
