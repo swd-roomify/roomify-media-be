@@ -1,6 +1,7 @@
 package com.roomify.detection_be.service.basicOauth;
 
 import com.roomify.detection_be.dto.BaseResponseDTO;
+import com.roomify.detection_be.dto.UserCreateDto;
 import com.roomify.detection_be.dto.UserDTO;
 import com.roomify.detection_be.exception.ApplicationErrorCode;
 import com.roomify.detection_be.exception.ApplicationException;
@@ -31,7 +32,7 @@ public class UserServiceOauthImpl implements UserServiceOauth {
   private final BCryptPasswordEncoder passwordEncoder;
 
   @Override
-  public BaseResponseDTO<User> registerAccount(UserDTO userDTO) {
+  public BaseResponseDTO<User> registerAccount(UserCreateDto userDTO) {
     validateAccount(userDTO);
     User user = insertUser(userDTO);
     userRepository.save(user);
@@ -44,7 +45,7 @@ public class UserServiceOauthImpl implements UserServiceOauth {
   }
 
   @Override
-  public void updateAccount(UserDTO userDTO) {
+  public void updateAccount(UserCreateDto userDTO) {
     validateAccount(userDTO);
     User currentUser =
         findCurrentUser()
@@ -80,7 +81,7 @@ public class UserServiceOauthImpl implements UserServiceOauth {
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
   }
 
-  private User updateUser(UserDTO userDTO, String userId) {
+  private User updateUser(UserCreateDto userDTO, String userId) {
     User user = userRepository.findById(userId).orElse(null);
     if (user != null) {
       user.setEmail(userDTO.getEmail());
@@ -90,7 +91,7 @@ public class UserServiceOauthImpl implements UserServiceOauth {
     return user;
   }
 
-  private User insertUser(UserDTO userDTO) {
+  private User insertUser(UserCreateDto userDTO) {
     Optional<Role> userRole = roleRepository.findByName("USER");
 
     return User.builder()
@@ -106,7 +107,7 @@ public class UserServiceOauthImpl implements UserServiceOauth {
         .build();
   }
 
-  private void validateAccount(UserDTO userDTO) {
+  private void validateAccount(UserCreateDto userDTO) {
     if (ObjectUtils.isEmpty(userDTO)) {
       throw new BaseException(
           String.valueOf(HttpStatus.BAD_REQUEST.value()), "Request data not found!");
@@ -120,12 +121,6 @@ public class UserServiceOauthImpl implements UserServiceOauth {
     } catch (IllegalAccessException e) {
       throw new BaseException(
           String.valueOf(HttpStatus.SERVICE_UNAVAILABLE.value()), "Service Unavailable");
-    }
-
-    List<String> roles = roleRepository.findAll().stream().map(Role::getName).toList();
-
-    if (!roles.contains(userDTO.getRole())) {
-      throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "Invalid role");
     }
 
     Optional<User> userFindByUsername = userRepository.findByUsername(userDTO.getUsername());

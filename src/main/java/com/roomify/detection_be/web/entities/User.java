@@ -2,6 +2,9 @@ package com.roomify.detection_be.web.entities;
 
 import jakarta.persistence.*;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
+
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -54,4 +57,11 @@ public class User {
 
   @Column(name = "created_at", updatable = false)
   private Instant createdAt = Instant.now();
+
+  @OneToMany(mappedBy = "user1")
+  private Set<Friendship> friendshipsInitiated = new HashSet<>();
+
+  @OneToMany(mappedBy = "user2")
+  private Set<Friendship> friendshipsReceived = new HashSet<>();
+
 }

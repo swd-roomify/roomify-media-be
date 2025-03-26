@@ -2,6 +2,7 @@ package com.roomify.detection_be.web.controller.api;
 
 import com.roomify.detection_be.web.dtos.req.UserCredentialReq;
 import com.roomify.detection_be.web.dtos.req.UserGenerateReq;
+import com.roomify.detection_be.web.dtos.res.AuthDtoRes;
 import com.roomify.detection_be.web.service.database.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class UserController {
   private final UserService userService;
 
   @PostMapping("/signin")
-  public ResponseEntity<?> authorizeUser(@RequestBody UserCredentialReq user) {
+  public ResponseEntity<AuthDtoRes> authorizeUser(@RequestBody UserCredentialReq user) {
     return ResponseEntity.ok(userService.getUserAuthorize(user));
   }
 

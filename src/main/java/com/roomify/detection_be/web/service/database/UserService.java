@@ -1,6 +1,7 @@
 package com.roomify.detection_be.web.service.database;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
+import com.roomify.detection_be.service.basicOauth.UserDetailsCustom;
 import com.roomify.detection_be.web.repository.FriendShipRepository;
 import com.roomify.detection_be.web.repository.UserRepository;
 import com.roomify.detection_be.service.basicOauth.UserServiceOauth;
@@ -87,8 +88,7 @@ public class UserService {
                 userCredentialReq.getEmail(), userCredentialReq.getPassword()));
 
     SecurityContextHolder.getContext().setAuthentication(authentication);
-    String token =
-        jwtTokenProvider.generateToken((CustomUserDetailsDTO) authentication.getPrincipal());
+    String token = jwtTokenProvider.generateToken((UserDetailsCustom) authentication.getPrincipal());
     return AuthDtoRes.toDto(
         new TokenDTO(token),
         new UserDtoRes(user.getUserId(), user.getUsername(), user.getEmail(), user.getCreatedAt()));
