@@ -33,14 +33,11 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
       HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
     String accessToken = request.getHeader(jwtConfig.getHeader());
-    log.info("Start do filter once per request, {}", request.getRequestURI());
 
     if (!ObjectUtils.isEmpty(accessToken) && accessToken.startsWith(jwtConfig.getPrefix() + " ")) {
       accessToken = accessToken.substring((jwtConfig.getPrefix() + " ").length());
-      log.info("passed the prefix test");
       try {
         if (jwtService.isValidToken(accessToken)) {
-          log.info("passed the valid token test");
           Claims claims = jwtService.extractClaims(accessToken);
 
           String username = claims.getSubject();
@@ -56,7 +53,6 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList()));
             SecurityContextHolder.getContext().setAuthentication(auth);
-            log.info("passed the authentication test");
           }
         } else {
           log.info("Failed the valid token test");
@@ -82,7 +78,6 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
         return;
       }
     }
-    log.info("end do filter: {}", request.getRequestURI());
     filterChain.doFilter(request, response);
   }
 }

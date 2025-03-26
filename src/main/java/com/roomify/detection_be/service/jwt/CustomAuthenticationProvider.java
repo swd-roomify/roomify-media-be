@@ -31,13 +31,11 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
   @Override
   public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-    log.info("Start actual authentication");
-    final String username = authentication.getName();
+    final String email = authentication.getPrincipal().toString();
     final String password = authentication.getCredentials().toString();
-
     User user =
         userRepository
-            .findByUsername(username)
+            .findByEmail(email)
             .orElseThrow(
                 () ->
                     new ApplicationException(
@@ -59,9 +57,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             user.isAccountNonExpired(),
             user.isAccountNonLocked(),
             user.isCredentialsNonExpired());
-
-    log.info("End actual authentication");
-
     return new UsernamePasswordAuthenticationToken(userDetails, password, authorities);
   }
 

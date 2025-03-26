@@ -1,5 +1,6 @@
 package com.roomify.detection_be.Repository;
 
+
 import com.roomify.detection_be.web.entities.Friendship;
 import com.roomify.detection_be.web.entities.User;
 import java.util.Optional;

@@ -2,6 +2,7 @@ package com.roomify.detection_be.web.controller.auth;
 
 import com.roomify.detection_be.config.JwtConfig;
 import com.roomify.detection_be.dto.BaseResponseDTO;
+import com.roomify.detection_be.dto.UserCreateDto;
 import com.roomify.detection_be.dto.UserDTO;
 import com.roomify.detection_be.service.basicOauth.UserServiceOauth;
 import com.roomify.detection_be.service.jwt.JwtService;
@@ -24,7 +25,7 @@ public class AuthController {
   private final JwtService jwtService;
 
   @PostMapping("/register-account")
-  public ResponseEntity<BaseResponseDTO> registerAccount(@RequestBody UserDTO userDTO) {
+  public ResponseEntity<BaseResponseDTO<User>> registerAccount(@RequestBody UserCreateDto userDTO) {
     return ResponseEntity.ok(userServiceOauth.registerAccount(userDTO));
   }
 
@@ -35,11 +36,10 @@ public class AuthController {
   }
 
   @PutMapping("/update-password")
-  public ResponseEntity<?> updatePassword(@RequestBody UserDTO userDTO) {
+  public ResponseEntity<?> updatePassword(@RequestBody UserCreateDto userDTO) {
     userServiceOauth.updateAccount(userDTO);
     return ResponseEntity.ok("Reset password successfully");
   }
-
   @PostMapping("/logout")
   public ResponseEntity<?> logout(HttpServletRequest request) {
     String accessToken = request.getHeader(jwtConfig.getHeader());

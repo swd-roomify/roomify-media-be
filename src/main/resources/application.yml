@@ -64,11 +64,6 @@ logging:
     org.springframework.web.socket=DEBUG:
     org.springframework.web=DEBUG:
 
-#<<<<<<< HEAD
-#app:
-#  jwt-secret: ${JWT_SECRET:FBu8YFbkcrgG9UUFbBKTTlkO5Md8Nd5Cf7O2V4uqs1I=}
-#  jwt-expiration-milliseconds: ${JWT_EXPIRATION:86400000}
-#=======
 jwt:
   url: /api/v1/login/non-type
   header: Authorization

@@ -3,10 +3,10 @@ package com.roomify.detection_be.web.service.database;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.roomify.detection_be.Repository.FriendShipRepository;
 import com.roomify.detection_be.Repository.UserRepository;
+import com.roomify.detection_be.service.basicOauth.UserDetailsCustom;
 import com.roomify.detection_be.service.basicOauth.UserServiceOauth;
 import com.roomify.detection_be.utility.SnowflakeGenerator;
 import com.roomify.detection_be.utility.jwt.JwtTokenProvider;
-import com.roomify.detection_be.web.dtos.jwt.CustomUserDetailsDTO;
 import com.roomify.detection_be.web.dtos.jwt.TokenDTO;
 import com.roomify.detection_be.web.dtos.req.UserCreateDtoReq;
 import com.roomify.detection_be.web.dtos.req.UserCredentialReq;
@@ -17,7 +17,7 @@ import com.roomify.detection_be.web.dtos.res.UserWSRes;
 import com.roomify.detection_be.web.entities.Friendship;
 import com.roomify.detection_be.web.entities.User;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,23 +25,29 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class UserService {
-  @Autowired private JwtTokenProvider jwtTokenProvider;
+  private final JwtTokenProvider jwtTokenProvider;
   private final AuthenticationManager authenticationManager;
-  @Autowired private UserServiceOauth userServiceOauth;
-  @Autowired private UserRepository userRepository;
-  @Autowired private FriendShipRepository friendShipRepository;
-
+  private final UserServiceOauth userServiceOauth;
+  private final UserRepository userRepository;
+  private final FriendShipRepository friendShipRepository;
   SnowflakeGenerator snowflake = new SnowflakeGenerator(1);
 
-  public UserService(AuthenticationManager authenticationManager) {
+  public UserService(JwtTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager, UserServiceOauth userServiceOauth, UserRepository userRepository, FriendShipRepository friendShipRepository) {
+    this.jwtTokenProvider = jwtTokenProvider;
     this.authenticationManager = authenticationManager;
+    this.userServiceOauth = userServiceOauth;
+    this.userRepository = userRepository;
+    this.friendShipRepository = friendShipRepository;
   }
 
-  public UserDtoRes CreateUser(UserCreateDtoReq userCreateDtoReq) {
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
+  public UserDtoRes createUser(UserCreateDtoReq userCreateDtoReq) {
     boolean emailExist = userRepository.existsByEmail(userCreateDtoReq.getEmail());
     boolean usernameExist = userRepository.existsByUsername(userCreateDtoReq.getUsername());
     if (emailExist || usernameExist) {
@@ -81,8 +87,7 @@ public class UserService {
                 userCredentialReq.getEmail(), userCredentialReq.getPassword()));
 
     SecurityContextHolder.getContext().setAuthentication(authentication);
-    String token =
-        jwtTokenProvider.generateToken((CustomUserDetailsDTO) authentication.getPrincipal());
+    String token = jwtTokenProvider.generateToken((UserDetailsCustom) authentication.getPrincipal());
     return AuthDtoRes.toDto(
         new TokenDTO(token),
         new UserDtoRes(user.getUserId(), user.getUsername(), user.getEmail(), user.getCreatedAt()));
@@ -92,7 +97,7 @@ public class UserService {
     return new UserWSRes(user.getUserId(), user.getUsername(), user.getCharacter(), 400, 400);
   }
 
-  public ResponseEntity<String> generateFriendShip(String userIdUser2) {
+  public String generateFriendShip(String userIdUser2) {
     Friendship friendship = new Friendship();
     Optional<User> user = userServiceOauth.findCurrentUser();
     if (user.isPresent()) {
@@ -101,7 +106,7 @@ public class UserService {
       friendship.setStatus("PENDING");
       friendShipRepository.save(friendship);
     }
-    return ResponseEntity.ok("Friend request sent.");
+    return "Friend request sent.";
   }
 
   public ResponseEntity<String> removeFriendShip(String userIdUser2) {
