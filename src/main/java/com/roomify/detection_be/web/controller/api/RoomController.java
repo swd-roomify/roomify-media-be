@@ -7,14 +7,17 @@ import com.roomify.detection_be.web.entities.RoomAccessHistory;
 import com.roomify.detection_be.web.entities.RoomParticipant;
 import com.roomify.detection_be.web.service.database.RoomService;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/rooms")
+@RequiredArgsConstructor
 public class RoomController {
-  @Autowired private RoomService roomService;
+  @Autowired
+  private RoomService roomService;
 
   @PostMapping
   public ResponseEntity<RoomDtoRes> CreateRoom(@RequestBody RoomCreateDtoReq room) {
@@ -28,7 +31,7 @@ public class RoomController {
 
   @GetMapping("/code/{roomCode}")
   public ResponseEntity<RoomDtoRes> GetRoomByCode(@PathVariable String roomCode) {
-    return ResponseEntity.ok(roomService.GetRoomByCode(roomCode));
+    return ResponseEntity.ok(roomService.getRoomByCode(roomCode));
   }
 
   @GetMapping("/user/{userId}")

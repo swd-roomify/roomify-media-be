@@ -1,5 +1,6 @@
 package com.roomify.detection_be.utility.jwt;
 
+import com.roomify.detection_be.service.basicOauth.UserDetailsCustom;
 import com.roomify.detection_be.web.dtos.jwt.CustomUserDetailsDTO;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -18,9 +19,9 @@ public class JwtTokenProvider {
   private String jwtSecret;
 
   @Value("${jwt.expiration}")
-  private long jwtExpirationDate; // Changed to long
+  private long jwtExpirationDate;
 
-  public String generateToken(CustomUserDetailsDTO authentication) {
+  public String generateToken(UserDetailsCustom authentication) {
     String username = authentication.getUsername();
     Date currentDate = new Date();
     Date expireDate = new Date(currentDate.getTime() + jwtExpirationDate);

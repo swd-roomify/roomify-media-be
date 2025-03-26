@@ -1,5 +1,4 @@
 package com.roomify.detection_be.web.controller.api;
-
 import com.roomify.detection_be.web.dtos.req.UserCreateDtoReq;
 import com.roomify.detection_be.web.dtos.req.UserCredentialReq;
 import com.roomify.detection_be.web.dtos.req.UserGenerateReq;
@@ -7,6 +6,7 @@ import com.roomify.detection_be.web.dtos.res.AuthDtoRes;
 import com.roomify.detection_be.web.dtos.res.UserDtoRes;
 import com.roomify.detection_be.web.dtos.res.UserWSRes;
 import com.roomify.detection_be.web.service.database.UserService;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +18,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/user/v1")
+@RequiredArgsConstructor
 public class UserController {
-  @Autowired private UserService userService;
+  @Autowired
+  private UserService userService;
   private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
   @PostMapping("/register")
   public ResponseEntity<UserDtoRes> CreateUser(@RequestBody UserCreateDtoReq user) {
-    return ResponseEntity.ok(userService.CreateUser(user));
+    return ResponseEntity.ok(userService.createUser(user));
   }
 
   @PostMapping("/signin")
@@ -40,11 +42,6 @@ public class UserController {
 
   @PostMapping("/request")
   public ResponseEntity<String> sendFriendRequest(@RequestParam String userIdUser2) {
-    return userService.generateFriendShip(userIdUser2);
-  }
-
-  @DeleteMapping("/unfriend")
-  public ResponseEntity<String> unfriend(@RequestParam String userIdUser2) {
-    return userService.removeFriendShip(userIdUser2);
+    return ResponseEntity.ok(userService.generateFriendShip(userIdUser2));
   }
 }

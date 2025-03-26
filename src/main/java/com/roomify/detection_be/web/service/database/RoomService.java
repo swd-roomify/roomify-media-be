@@ -14,14 +14,17 @@ import com.roomify.detection_be.web.entities.User;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
+@RequiredArgsConstructor
 public class RoomService {
-  @Autowired private RoomRepository roomRepository;
+  @Autowired
+  private RoomRepository roomRepository;
   @Autowired private RoomParticipantRepository participantRepository;
   @Autowired private UserRepository userRepository;
   @Autowired private RoomTypeRepository roomTypeRepository;
@@ -74,8 +77,7 @@ public class RoomService {
         room.getHost().getUserId(),
         room.getCreatedAt());
   }
-
-  public RoomDtoRes GetRoomByCode(String roomCode) {
+  public RoomDtoRes getRoomByCode(String roomCode) {
     Room room =
         roomRepository
             .findByRoomCode(roomCode)
@@ -88,7 +90,6 @@ public class RoomService {
         room.getHost().getUserId(),
         room.getCreatedAt());
   }
-
   public List<RoomDtoRes> GetRoomsByUserId(String userId) {
     List<Room> rooms = roomRepository.findByHost_UserId(userId);
     return rooms.stream()
@@ -149,8 +150,7 @@ public class RoomService {
   public List<RoomParticipant> getParticipants(String roomId) {
     return participantRepository.findUsersByRoomId(roomId);
   }
-
-  public List<RoomParticipant> AddParticipantToRoom(String roomId, String userId, String hostId) {
+  public List<RoomParticipant> addParticipantToRoom(String roomId, String userId, String hostId) {
     Room room =
         roomRepository
             .findById(roomId)
@@ -169,7 +169,7 @@ public class RoomService {
     return participantRepository.findUsersByRoomId(roomId);
   }
 
-  public List<RoomParticipant> RemoveParticipantFromRoom(String roomId, String userId) {
+  public List<RoomParticipant> removeParticipantFromRoom(String roomId, String userId) {
     participantRepository.deleteByRoomIdAndUserUserId(roomId, userId);
     return participantRepository.findUsersByRoomId(roomId);
   }

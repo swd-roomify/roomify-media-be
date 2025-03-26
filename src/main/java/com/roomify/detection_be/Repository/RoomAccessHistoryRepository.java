@@ -1,4 +1,8 @@
+<<<<<<< HEAD:src/main/java/com/roomify/detection_be/Repository/RoomAccessHistoryRepository.java
 package com.roomify.detection_be.Repository;
+=======
+package com.roomify.detection_be.web.repository;
+>>>>>>> develop:src/main/java/com/roomify/detection_be/web/repository/RoomAccessHistoryRepository.java
 
 import com.roomify.detection_be.web.entities.RoomAccessHistory;
 import java.util.List;

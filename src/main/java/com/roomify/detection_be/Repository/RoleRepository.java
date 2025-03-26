@@ -1,4 +1,8 @@
+<<<<<<< HEAD:src/main/java/com/roomify/detection_be/Repository/RoleRepository.java
 package com.roomify.detection_be.Repository;
+=======
+package com.roomify.detection_be.web.repository;
+>>>>>>> develop:src/main/java/com/roomify/detection_be/web/repository/RoleRepository.java
 
 import com.roomify.detection_be.web.entities.Role;
 import java.util.Optional;
