@@ -2,7 +2,6 @@ package com.roomify.detection_be.constants;
 
 public interface SecurityConstants {
   String[] PUBLIC_URLS = {
-
     "/oauth2/authorization/google",
     "/oauth2/authorization/github",
     "/login/oauth2/code/*",
