@@ -1,8 +1,4 @@
-<<<<<<< HEAD:src/main/java/com/roomify/detection_be/Repository/RoomParticipantRepository.java
 package com.roomify.detection_be.Repository;
-=======
-package com.roomify.detection_be.web.repository;
->>>>>>> develop:src/main/java/com/roomify/detection_be/web/repository/RoomParticipantRepository.java
 
 import com.roomify.detection_be.web.entities.RoomParticipant;
 import java.util.List;

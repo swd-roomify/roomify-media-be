@@ -1,8 +1,4 @@
-<<<<<<< HEAD:src/main/java/com/roomify/detection_be/Repository/RoomTypeRepository.java
 package com.roomify.detection_be.Repository;
-=======
-package com.roomify.detection_be.web.repository;
->>>>>>> develop:src/main/java/com/roomify/detection_be/web/repository/RoomTypeRepository.java
 
 import com.roomify.detection_be.web.entities.RoomType;
 import java.util.Optional;
