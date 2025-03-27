@@ -67,7 +67,9 @@ public class UserService {
         savedUser.getUserId(),
         savedUser.getUsername(),
         savedUser.getEmail(),
-        savedUser.getCreatedAt());
+        savedUser.getCreatedAt(),
+            savedUser.getRole().getName(),
+            savedUser.isEnabled());
   }
 
   public AuthDtoRes GetUserAuthorize(UserCredentialReq userCredentialReq) {
@@ -93,7 +95,7 @@ public class UserService {
     String token = jwtTokenProvider.generateToken((UserDetailsCustom) authentication.getPrincipal());
     return AuthDtoRes.toDto(
         new TokenDTO(token),
-        new UserDtoRes(user.getUserId(), user.getUsername(), user.getEmail(), user.getCreatedAt()));
+        new UserDtoRes(user.getUserId(), user.getUsername(), user.getEmail(), user.getCreatedAt(), user.getRole().getName(), user.isEnabled()));
   }
 
   public UserWSRes GenerateCharacter(UserGenerateReq user) {

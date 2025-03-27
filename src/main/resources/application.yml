@@ -68,6 +68,5 @@ jwt:
   url: /api/v1/login/non-type
   header: Authorization
   prefix: Bearer
-  expiration: 360000
   secret: ${JWT_SECRET:FBu8YFbkcrgG9UUFbBKTTlkO5Md8Nd5Cf7O2V4uqs1I=}
   expiration: 86400000

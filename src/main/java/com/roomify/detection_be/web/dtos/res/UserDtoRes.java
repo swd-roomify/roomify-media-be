@@ -13,4 +13,6 @@ public class UserDtoRes {
   private String username;
   private String email;
   private Instant createdAt;
+  private String roleName;
+  private boolean isEnabled;
 }
