@@ -1,8 +1,10 @@
 package com.roomify.detection_be.service.basicOauth;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.roomify.detection_be.Repository.RoleRepository;
 import com.roomify.detection_be.Repository.UserRepository;
 import com.roomify.detection_be.dto.BaseResponseDTO;
+import com.roomify.detection_be.dto.NewPasswordDto;
 import com.roomify.detection_be.dto.UserCreateDto;
 import com.roomify.detection_be.dto.UserDTO;
 import com.roomify.detection_be.exception.ApplicationErrorCode;
@@ -45,22 +47,13 @@ public class UserServiceOauthImpl implements UserServiceOauth {
   }
 
   @Override
-  public void updateAccount(UserCreateDto userDTO) {
-    validateAccount(userDTO);
-    User currentUser =
-        findCurrentUser()
-            .orElseThrow(
-                () ->
-                    new ApplicationException(
-                        ApplicationErrorCode.USER_NOT_FOUND, "Current user not found"));
-
-    User user = updateUser(userDTO, currentUser.getUserId());
+  public void updateAccount(NewPasswordDto passwordDto) {
+    User user = userRepository.findById(passwordDto.getUserId())
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+    if(user.getPassword() == null || BCrypt.verifyer().verify(passwordDto.getOldPassword().toCharArray(), user.getPassword()).verified) {
+        user.setPassword(BCrypt.withDefaults().hashToString(12, passwordDto.getNewPassword().toCharArray()));
+    }
     userRepository.save(user);
-
-    BaseResponseDTO<User> response = new BaseResponseDTO<>();
-    response.setCode(String.valueOf(HttpStatus.OK.value()));
-    response.setData(user);
-    response.setMessage("Register account successfully!!!");
   }
 
   @Override

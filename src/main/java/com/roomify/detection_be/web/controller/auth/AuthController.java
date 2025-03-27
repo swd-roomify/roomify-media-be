@@ -2,6 +2,7 @@ package com.roomify.detection_be.web.controller.auth;
 
 import com.roomify.detection_be.config.JwtConfig;
 import com.roomify.detection_be.dto.BaseResponseDTO;
+import com.roomify.detection_be.dto.NewPasswordDto;
 import com.roomify.detection_be.dto.UserCreateDto;
 import com.roomify.detection_be.dto.UserDTO;
 import com.roomify.detection_be.service.basicOauth.UserServiceOauth;
@@ -36,8 +37,8 @@ public class AuthController {
   }
 
   @PutMapping("/update-password")
-  public ResponseEntity<?> updatePassword(@RequestBody UserCreateDto userDTO) {
-    userServiceOauth.updateAccount(userDTO);
+  public ResponseEntity<?> updatePassword(@RequestBody NewPasswordDto passwordDto) {
+    userServiceOauth.updateAccount(passwordDto);
     return ResponseEntity.ok("Reset password successfully");
   }
   @PostMapping("/logout")

@@ -60,7 +60,7 @@ public class RoomService {
         savedRoom.getId(),
         savedRoom.getName(),
         savedRoom.getRoomCode(),
-        savedRoom.getHost().getUserId(),
+        savedRoom.getHost(),
         savedRoom.getCreatedAt());
   }
 
@@ -74,8 +74,21 @@ public class RoomService {
         room.getId(),
         room.getName(),
         room.getRoomCode(),
-        room.getHost().getUserId(),
+        room.getHost(),
         room.getCreatedAt());
+  }
+  public List<RoomDtoRes> GetAllRooms(){
+    List<Room> rooms = roomRepository.findAll();
+    return rooms.stream()
+        .map(
+            room ->
+                new RoomDtoRes(
+                    room.getId(),
+                    room.getName(),
+                    room.getRoomCode(),
+                    room.getHost(),
+                    room.getCreatedAt()))
+        .toList();
   }
   public RoomDtoRes getRoomByCode(String roomCode) {
     Room room =
@@ -87,7 +100,7 @@ public class RoomService {
         room.getId(),
         room.getName(),
         room.getRoomCode(),
-        room.getHost().getUserId(),
+        room.getHost(),
         room.getCreatedAt());
   }
   public List<RoomDtoRes> GetRoomsByUserId(String userId) {
@@ -99,7 +112,7 @@ public class RoomService {
                     room.getId(),
                     room.getName(),
                     room.getRoomCode(),
-                    room.getHost().getUserId(),
+                    room.getHost(),
                     room.getCreatedAt()))
         .toList();
   }

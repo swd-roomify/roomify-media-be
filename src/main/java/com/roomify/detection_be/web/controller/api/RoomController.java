@@ -33,6 +33,10 @@ public class RoomController {
   public ResponseEntity<RoomDtoRes> GetRoomByCode(@PathVariable String roomCode) {
     return ResponseEntity.ok(roomService.getRoomByCode(roomCode));
   }
+  @GetMapping()
+  public ResponseEntity<List<RoomDtoRes>> GetAllRooms() {
+    return ResponseEntity.ok(roomService.GetAllRooms());
+  }
 
   @GetMapping("/user/{userId}")
   public ResponseEntity<List<RoomDtoRes>> GetRoomByUserId(@PathVariable String userId) {
