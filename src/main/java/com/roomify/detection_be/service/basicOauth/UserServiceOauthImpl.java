@@ -50,8 +50,14 @@ public class UserServiceOauthImpl implements UserServiceOauth {
   public void updateAccount(NewPasswordDto passwordDto) {
     User user = userRepository.findById(passwordDto.getUserId())
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+    if(user.getPassword() != null && passwordDto.getOldPassword() == null){
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Incorrect login method, password is already initialized");
+    }
     if(user.getPassword() == null || BCrypt.verifyer().verify(passwordDto.getOldPassword().toCharArray(), user.getPassword()).verified) {
         user.setPassword(BCrypt.withDefaults().hashToString(12, passwordDto.getNewPassword().toCharArray()));
+    }
+    else{
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Incorrect password");
     }
     userRepository.save(user);
   }
